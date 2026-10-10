@@ -1,0 +1,193 @@
+﻿{
+  "model": {
+    "id": "Karshaka Care-rice-mobilenet-onnx",
+    "version": "1.0.0",
+    "format": "ONNX",
+    "architecture": "MobileNetV2 / EfficientNet Rice Leaf Classifier",
+    "provenance": "HuggingFace KrishokTech-Models (Apache-2.0)",
+    "input_shape": [1, 3, 224, 224],
+    "input_mean": [0.485, 0.456, 0.406],
+    "input_std": [0.229, 0.224, 0.225]
+  },
+  "classes": {
+    "0": {
+      "key": "others",
+      "nameMl": "മറ്റ് സസ്യങ്ങൾ / നിർണ്ണയിക്കാനാവാത്ത ഇല",
+      "nameEn": "Others / Out of Scope",
+      "category": "out_of_scope",
+      "descriptionMl": "നൽകിയ ചിത്രം നെൽച്ചെടിയുടെ രോഗലക്ഷണങ്ങളുമായി പൊരുത്തപ്പെടുന്നില്ല. വ്യക്തമായ മറ്റൊരു ചിത്രം നൽകുക.",
+      "descriptionEn": "The uploaded photograph does not match documented rice leaf disease patterns. Please provide a clearer leaf photograph.",
+      "kauReference": "General GAP Diagnostic Protocol",
+      "uncertaintyFlag": true
+    },
+    "1": {
+      "key": "bacterial_leaf_blight",
+      "nameMl": "ബാക്ടീരിയൽ ഇലവാട്ടം (Bacterial Leaf Blight)",
+      "nameEn": "Bacterial Leaf Blight (BLB)",
+      "category": "disease_bacterial_blight",
+      "descriptionMl": "ഇലയുടെ അരികുകളിൽ നിന്നാരംഭിച്ച് താഴേക്ക് പടരുന്ന മഞ്ഞനിറത്തിലുള്ള വരകൾ, പിന്നീട് വൈക്കോൽ നിറമാകൽ (Xanthomonas oryzae).",
+      "descriptionEn": "Marginal wave-like yellowing advancing downward, turning straw-colored (Xanthomonas oryzae pv. oryzae).",
+      "kauReference": "KAU Package of Practices - Rice (Paddy), Section 3.2.3: BLB",
+      "actionPlanMl": [
+        "പാടത്ത് വെള്ളം കെട്ടിനിൽക്കുന്നത് പൂർണ്ണമായി ഒഴിവാക്കി ഡ്രെയിനേജ് ഉറപ്പാക്കുക.",
+        "നൈട്രജൻ (യൂറിയ) വളപ്രയോഗം രോഗലക്ഷണം ശമിക്കുന്നതുവരെ ഉടനടി നിർത്തുക.",
+        "പൊട്ടാഷ് വളത്തിന്റെ അളവ് ക്രമീകരിച്ച് പ്രതിരോധശേഷി വർദ്ധിപ്പിക്കുക.",
+        "വെള്ളം കയറ്റുന്ന ചാലുകളിൽ ബ്ലീച്ചിംഗ് പൗഡർ (5 കി.ഗ്രാം/ഹെക്ടർ) പ്രയോഗിക്കുന്നത് രോഗാണു വ്യാപനം കുറയ്ക്കും."
+      ],
+      "actionPlanEn": [
+        "Drain standing water completely from the field.",
+        "Stop Nitrogen (urea) application immediately.",
+        "Optimize Potash application to enhance cell wall resistance.",
+        "Bleaching powder (5kg/ha) application via irrigation water retards bacterial spread."
+      ]
+    },
+    "2": {
+      "key": "brown_spot",
+      "nameMl": "ഇലപ്പുള്ളി രോഗം (Brown Spot)",
+      "nameEn": "Brown Spot (Bipolaris oryzae)",
+      "category": "disease_brown_spot",
+      "descriptionMl": "ഇലകളിൽ ദീർഘവൃത്താകൃതിയിലുള്ള ചെറിയ തവിട്ടുനിറത്തിലുള്ള പുള്ളികൾ. പോഷകക്കുറവുള്ള മണ്ണിൽ കൂടുതലായി കാണപ്പെടുന്നു.",
+      "descriptionEn": "Small, oval, brown spots on leaves with gray centers, often associated with potash deficiency.",
+      "kauReference": "KAU Package of Practices - Rice (Paddy), Section 3.2.1: Brown Spot",
+      "actionPlanMl": [
+        "മണ്ണിൽ പൊട്ടാഷ് (Potash) വളത്തിന്റെ കുറവുണ്ടെങ്കിൽ ശുപാർശ ചെയ്ത അളവിൽ നൽകുക.",
+        "അമിതമായ നൈട്രജൻ പ്രയോഗം ഒഴിവാക്കുക.",
+        "പാടത്ത് വായുസഞ്ചാരവും ആവശ്യത്തിന് വെളിച്ചവും ഉറപ്പാക്കുക.",
+        "ലക്ഷണങ്ങൾ വ്യാപകമാണെങ്കിൽ അടുത്തുള്ള കൃഷിഭവനുമായി ബന്ധപ്പെടുക."
+      ],
+      "actionPlanEn": [
+        "Correct soil potash deficiency according to soil test recommendations.",
+        "Avoid excess Nitrogen fertilizer.",
+        "Maintain proper plant spacing for aeration.",
+        "If spots spread aggressively, consult the local Krishi Bhavan."
+      ]
+    },
+    "3": {
+      "key": "healthy_leaf",
+      "nameMl": "ആരോഗ്യമുള്ള ഇല (Healthy Leaf)",
+      "nameEn": "Healthy Paddy Leaf",
+      "category": "healthy",
+      "descriptionMl": "ഇലകളിൽ കാര്യമായ രോഗലക്ഷണങ്ങളോ കരിച്ചിലോ കാണുന്നില്ല. വിള ആരോഗ്യകരമായി വളരുന്നു.",
+      "descriptionEn": "No significant foliar lesions or pathogen damage detected. Crop foliage appears vigorous.",
+      "kauReference": "KAU Rice Crop Monitoring Protocol",
+      "actionPlanMl": [
+        "സാധാരണ വളർച്ചാ പരിചരണവും ശുപാർശ ചെയ്ത ജലക്രമീകരണവും തുടരുക.",
+        "തുടർച്ചയായി നിരീക്ഷണം നടത്തുക, രോഗലക്ഷണങ്ങൾ കണ്ടാൽ മാത്രം ഇടപെടുക."
+      ],
+      "actionPlanEn": [
+        "Continue routine recommended crop management and water scheduling.",
+        "Maintain periodic scouting; avoid unnecessary chemical interventions."
+      ]
+    },
+    "4": {
+      "key": "leaf_blast",
+      "nameMl": "ഇലക്കരിച്ചിൽ (Rice Leaf Blast)",
+      "nameEn": "Rice Leaf Blast (Magnaporthe oryzae)",
+      "category": "disease_blast",
+      "descriptionMl": "ഇലകളിൽ സ്പിൻഡിൽ (നൂൽക്കതിർ) ആകൃതിയിലുള്ള പുള്ളികളും അഗ്രം കരിഞ്ഞുണങ്ങുന്നതും. നനഞ്ഞ അന്തരീക്ഷത്തിൽ പെട്ടെന്ന് പടരുന്നു.",
+      "descriptionEn": "Spindle-shaped elliptical lesions with gray centers and brown margins (Magnaporthe oryzae).",
+      "kauReference": "KAU Package of Practices - Rice, Section 3.2.2: Blast",
+      "actionPlanMl": [
+        "പാടത്തുനിന്ന് കെട്ടിക്കിടക്കുന്ന വെള്ളം ഒഴുക്കിക്കളഞ്ഞ് ശുദ്ധജലം കയറ്റുക.",
+        "യൂറിയ വളപ്രയോഗം രോഗലക്ഷണം ശമിക്കുന്നതുവരെ താൽക്കാലികമായി നിർത്തിവെക്കുക.",
+        "തുടക്കഘട്ടത്തിൽ സ്യൂഡോമോണസ് (20g/L) തളിക്കുന്നത് ഫലപ്രദമാണ്.",
+        "കതിരിടുന്ന ഘട്ടത്തിൽ ലക്ഷണം കണ്ടാൽ ഉടൻ കൃഷി ഓഫീസറെ അറിയിക്കുക."
+      ],
+      "actionPlanEn": [
+        "Drain stagnant water from the field and refresh water level.",
+        "Temporarily withhold Nitrogen top-dressing.",
+        "Spray biocontrol agent Pseudomonas fluorescens (20g/L).",
+        "Alert Krishi Bhavan officer if panicle neck infection is suspected."
+      ]
+    },
+    "5": {
+      "key": "leaf_scald",
+      "nameMl": "ഇലക്കരിപ്പൻ (Leaf Scald)",
+      "nameEn": "Leaf Scald (Microdochium oryzae)",
+      "category": "disease_leaf_scald",
+      "descriptionMl": "ഇലത്തുമ്പുകളിൽ നിന്ന് ആരംഭിക്കുന്ന വലയങ്ങളോടുകൂടിയ കരിച്ചിൽ.",
+      "descriptionEn": "Zonate lesions initiating from leaf tips with wavy margins.",
+      "kauReference": "KAU Package of Practices - Rice: Foliar Scald",
+      "actionPlanMl": [
+        "പാടത്തെ ഈർപ്പനിലയും വായുസഞ്ചാരവും ക്രമീകരിക്കുക.",
+        "സന്തുലിത വളപ്രയോഗം പാലിക്കുക."
+      ],
+      "actionPlanEn": [
+        "Optimize crop canopy aeration and drain excess moisture.",
+        "Apply balanced NPK fertilization."
+      ]
+    },
+    "6": {
+      "key": "narrow_brown_leaf_spot",
+      "nameMl": "നീളൻ തവിട്ടുപുള്ളി (Narrow Brown Leaf Spot)",
+      "nameEn": "Narrow Brown Leaf Spot (Cercospora oryzae)",
+      "category": "disease_narrow_brown_spot",
+      "descriptionMl": "ഇലകളിൽ നീളത്തിലുള്ള നേർത്ത തവിട്ടു വരകൾ.",
+      "descriptionEn": "Short, narrow, linear brown lesions parallel to leaf veins.",
+      "kauReference": "KAU Package of Practices - Rice: Cercospora Spot",
+      "actionPlanMl": [
+        "പൊട്ടാഷ് വളപ്രയോഗം കൃത്യമായ അളവിൽ ഉറപ്പാക്കുക.",
+        "വിത്ത് പരിചരണ മാർഗ്ഗങ്ങൾ പാലിക്കുക."
+      ],
+      "actionPlanEn": [
+        "Ensure adequate potash nutrition.",
+        "Employ certified disease-free seeds."
+      ]
+    },
+    "7": {
+      "key": "rice_hispa",
+      "nameMl": "ഹിസ്പ വണ്ട് ആക്രമണം (Rice Hispa)",
+      "nameEn": "Rice Hispa (Dicladispa armigera)",
+      "category": "pest_hispa",
+      "descriptionMl": "ഇലകളിലെ പച്ചപ്പ് മാന്തിയെടുത്ത് വെള്ള വരകളുണ്ടാക്കുന്ന ചെറുകീടം.",
+      "descriptionEn": "Leaf scraping leading to characteristic white blister-like streaks.",
+      "kauReference": "KAU Package of Practices - Rice: Pest Management",
+      "actionPlanMl": [
+        "ഇലത്തുമ്പുകൾ നുള്ളിക്കളഞ്ഞ് മുട്ടകൾ നശിപ്പിക്കുക.",
+        "വെള്ളം വാർത്തു കളഞ്ഞ് വേപ്പ് അധിഷ്ഠിത കീടനാശിനി പ്രയോഗിക്കുക."
+      ],
+      "actionPlanEn": [
+        "Clip leaf tips to eliminate egg pockets.",
+        "Field drainage followed by neem-based repellant spray."
+      ]
+    },
+    "8": {
+      "key": "sheath_blight",
+      "nameMl": "പോളക്കരിച്ചിൽ (Sheath Blight)",
+      "nameEn": "Sheath Blight (Rhizoctonia solani)",
+      "category": "disease_sheath_blight",
+      "descriptionMl": "തണ്ടിനോട് ചേർന്ന പോളകളിൽ പച്ചകലർന്ന ചാരനിറത്തിലുള്ള പുള്ളികൾ രൂപപ്പെടൽ.",
+      "descriptionEn": "Oval, greenish-gray lesions forming on leaf sheaths near water line.",
+      "kauReference": "KAU Package of Practices - Rice: Sheath Blight",
+      "actionPlanMl": [
+        "പാടത്തെ വെള്ളം കുറച്ച് ഈർപ്പം നിയന്ത്രിക്കുക.",
+        "അമിത തിങ്ങിവിളർച്ച ഒഴിവാക്കുക.",
+        "കൃഷി ഓഫീസറുടെ നിർദ്ദേശപ്രകാരം ട്രൈക്കോഡെർമ പ്രയോഗിക്കുക."
+      ],
+      "actionPlanEn": [
+        "Reduce standing water to decrease microclimate relative humidity.",
+        "Avoid dense planting.",
+        "Apply Trichoderma bio-inoculant under guidance."
+      ]
+    },
+    "9": {
+      "key": "tungro",
+      "nameMl": "തുംഗ്രോ വൈറസ് രോഗം (Rice Tungro)",
+      "nameEn": "Rice Tungro Virus",
+      "category": "disease_tungro",
+      "descriptionMl": "ചെടികൾ മുരടിക്കുകയും ഇലകൾ മഞ്ഞ അല്ലെങ്കിൽ ഓറഞ്ച് നിറമാകുകയും ചെയ്യൽ (പച്ചത്തുള്ളൻ പരത്തുന്നത്).",
+      "descriptionEn": "Stunting with characteristic orange-yellow leaf discoloration spread by green leafhopper.",
+      "kauReference": "KAU Package of Practices - Rice: Virus Diseases",
+      "actionPlanMl": [
+        "രോഗം പരത്തുന്ന പച്ചത്തുള്ളൻ പ്രാണികളെ നിയന്ത്രിക്കുക.",
+        "രോഗബാധ രൂക്ഷമായ ചെടികൾ പിഴുതുമാറ്റി നശിപ്പിക്കുക.",
+        "ഉടൻ കൃഷിഭവനുമായി ബന്ധപ്പെടുക."
+      ],
+      "actionPlanEn": [
+        "Control green leafhopper vector population.",
+        "Rogue and destroy severely infected clumps.",
+        "Contact Krishi Bhavan agricultural extension immediately."
+      ]
+    }
+  }
+}

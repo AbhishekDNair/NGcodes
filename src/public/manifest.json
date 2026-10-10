@@ -1,0 +1,24 @@
+{
+  "name": "കർഷക കെയർ - കാർഷിക നിർണ്ണയ സഹായി (Karshaka Care)",
+  "short_name": "കർഷക കെയർ",
+  "description": "കേരളത്തിലെ കർഷകർക്കായുള്ള ഓഫ്‌ലൈൻ കാർഷിക നിർണ്ണയ സഹായി (Karshaka Care Agricultural Decision Agent)",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1b13",
+  "theme_color": "#1b4d3e",
+  "orientation": "portrait-primary",
+  "lang": "ml",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["agriculture", "productivity", "utilities"]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "karshaka-care",
+  "version": "1.0.0",
+  "description": "Karshaka Care - Malayalam-First, Offline-Capable Agricultural Decision Agent for Kerala Rice Farmers",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "agriculture",
+    "kerala",
+    "malayalam",
+    "mcp",
+    "edge-ai",
+    "offline-first"
+  ],
+  "author": "Karshaka Care Team",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "express": "^4.22.3",
+    "jpeg-js": "^0.4.4",
+    "onnxruntime-node": "^1.30.0",
+    "playwright-core": "^1.64.0",
+    "pngjs": "^7.0.0"
+  }
+}

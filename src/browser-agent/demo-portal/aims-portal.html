@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIMS Kerala - കർഷക ക്ഷേമ പോർട്ടൽ (Agricultural Information Management System)</title>
+  <style>
+    :root {
+      --primary: #005a36;
+      --primary-dark: #003d24;
+      --secondary: #e8f5e9;
+      --text: #212529;
+      --border: #ced4da;
+      --success: #2e7d32;
+      --warning: #f57f17;
+      --danger: #c62828;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: #f4f6f8; color: var(--text); padding-bottom: 40px; }
+    .gov-header { background: #fff; border-bottom: 3px solid var(--primary); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .gov-title { display: flex; align-items: center; gap: 14px; }
+    .gov-emblem { font-size: 32px; }
+    .gov-title h1 { font-size: 1.2rem; color: var(--primary-dark); font-weight: 700; }
+    .gov-title p { font-size: 0.82rem; color: #555; }
+    .container { max-width: 800px; margin: 24px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); padding: 24px; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; background: var(--secondary); color: var(--primary); }
+    .step-indicator { display: flex; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px; gap: 16px; }
+    .step { font-size: 0.88rem; color: #777; font-weight: 600; }
+    .step.active { color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 4px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 6px; }
+    input, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; }
+    input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,90,54,0.15); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: #e0e0e0; color: #333; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .hidden { display: none; }
+    .alert { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 0.9rem; }
+    .alert-info { background: #e3f2fd; color: #0d47a1; border-left: 4px solid #1976d2; }
+    .alert-success { background: #e8f5e9; color: #1b5e20; border-left: 4px solid var(--success); }
+    .alert-warning { background: #fff8e1; color: #e65100; border-left: 4px solid var(--warning); }
+    .review-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .review-table td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+    .review-table td:first-child { font-weight: 600; width: 40%; color: #555; }
+    .checkbox-wrap { display: flex; align-items: flex-start; gap: 10px; margin: 20px 0; font-size: 0.9rem; }
+    .checkbox-wrap input { width: auto; margin-top: 3px; }
+    .ref-code { font-size: 1.4rem; font-weight: bold; color: var(--primary); font-family: monospace; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+  <header class="gov-header">
+    <div class="gov-title">
+      <span class="gov-emblem" aria-hidden="true">🏛️</span>
+      <div>
+        <h1>AIMS പോർട്ടൽ - കൃഷിവകുപ്പ് കേരളം</h1>
+        <p>Department of Agriculture Development and Farmers' Welfare, Govt. of Kerala</p>
+      </div>
+    </div>
+    <span class="badge">ഓൺലൈൻ സേവനം 2026</span>
+  </header>
+
+  <main class="container">
+    <div class="step-indicator">
+      <span id="step-1-label" class="step active">1. വിവരങ്ങൾ പൂരിപ്പിക്കുക (Application)</span>
+      <span id="step-2-label" class="step">2. കർഷകന്റെ പുനഃപരിശോധന (Review Gate)</span>
+      <span id="step-3-label" class="step">3. രസീത് (Receipt)</span>
+    </div>
+
+    <!-- Step 1: Form Fill -->
+    <div id="section-form">
+      <div class="alert alert-info">
+        <strong>നെൽക്കൃഷി റോയൽറ്റി & സുഭിക്ഷ കേരളം അസിസ്റ്റൻസ്:</strong> വിവരങ്ങൾ കൃത്യമായി രേഖപ്പെടുത്തുക.
+      </div>
+
+      <form id="scheme-application-form">
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="farmer-name">കർഷകന്റെ പേര് (Farmer Name):</label>
+            <input type="text" id="farmer-name" name="farmerName" placeholder="ഉദാ: രാഘവൻ പിള്ള" required>
+          </div>
+          <div class="form-group">
+            <label for="farmer-aadhaar">ആധാർ നമ്പർ (Aadhaar Number):</label>
+            <input type="text" id="farmer-aadhaar" name="farmerAadhaar" placeholder="XXXX-XXXX-XXXX" maxlength="14" required>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="farmer-phone">ഫോൺ നമ്പർ (Mobile Number):</label>
+            <input type="tel" id="farmer-phone" name="farmerPhone" placeholder="9876543210" maxlength="10" required>
+          </div>
+          <div class="form-group">
+            <label for="district-select">ജില്ല (District):</label>
+            <select id="district-select" name="district" required>
+              <option value="">-- ജില്ല തിരഞ്ഞെടുക്കുക --</option>
+              <option value="Alappuzha" selected>ആലപ്പുഴ (Alappuzha - Kuttanad)</option>
+              <option value="Palakkad">പാലക്കാട് (Palakkad)</option>
+              <option value="Thrissur">തൃശ്ശൂർ (Thrissur)</option>
+              <option value="Kottayam">കോട്ടയം (Kottayam)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="crop-type">കൃഷി ചെയ്യുന്ന വിള (Crop):</label>
+            <select id="crop-type" name="crop" required>
+              <option value="paddy" selected>നെല്ല് (Paddy / Rice)</option>
+              <option value="banana">വാഴ (Banana)</option>
+              <option value="vegetables">പച്ചക്കറി (Vegetables)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="land-area-cents">സ്ഥലത്തിന്റെ വിസ്തീർണ്ണം സെൻ്റിൽ (Land Area in Cents):</label>
+            <input type="number" id="land-area-cents" name="landAreaCents" min="10" value="50" required>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="bank-account">ബാങ്ക് അക്കൗണ്ട് നമ്പർ (Bank Account):</label>
+            <input type="text" id="bank-account" name="bankAccount" placeholder="123456789012" required>
+          </div>
+          <div class="form-group">
+            <label for="ifsc-code">IFSC കോഡ് (IFSC Code):</label>
+            <input type="text" id="ifsc-code" name="ifscCode" placeholder="SBIN0001234" required>
+          </div>
+        </div>
+
+        <div style="text-align: right; margin-top: 16px;">
+          <button type="button" id="btn-goto-review" class="btn btn-primary">
+            തുടരുക: വിവരങ്ങൾ പരിശോധിക്കുക →
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 2: Review & Explicit Human Confirmation Gate -->
+    <div id="section-review" class="hidden">
+      <div class="alert alert-warning" id="review-alert-gate">
+        <strong>⚠️ സുരക്ഷാ നിർദ്ദേശം (Safety Gate):</strong> ഏജന്റ് വഴി പൂരിപ്പിച്ച വിവരങ്ങൾ കർഷകൻ സ്വയം പരിശോധിച്ച് അംഗീകരിക്കാതെ അപേക്ഷ സമർപ്പിക്കപ്പെടില്ല.
+      </div>
+
+      <table class="review-table">
+        <tbody>
+          <tr><td>കർഷകന്റെ പേര്:</td><td id="rev-farmer-name">-</td></tr>
+          <tr><td>ആധാർ നമ്പർ:</td><td id="rev-farmer-aadhaar">-</td></tr>
+          <tr><td>ഫോൺ നമ്പർ:</td><td id="rev-farmer-phone">-</td></tr>
+          <tr><td>ജില്ല:</td><td id="rev-district">-</td></tr>
+          <tr><td>വിള:</td><td id="rev-crop">-</td></tr>
+          <tr><td>വിസ്തീർണ്ണം:</td><td id="rev-land-area">-</td></tr>
+          <tr><td>ബാങ്ക് അക്കൗണ്ട്:</td><td id="rev-bank-account">-</td></tr>
+          <tr><td>IFSC കോഡ്:</td><td id="rev-ifsc">-</td></tr>
+          <tr><td>പദ്ധതി:</td><td>നെൽവയൽ ഉടമസ്ഥ റോയൽറ്റി ധനസഹായം (ഹെക്ടറിന് ₹5,500)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="checkbox-wrap">
+        <input type="checkbox" id="farmer-confirmation-checkbox">
+        <label for="farmer-confirmation-checkbox">
+          ഞാൻ നൽകിയ വിവരങ്ങൾ സത്യമാണെന്നും, കൃഷിഭവൻ പരിശോധനയ്ക്ക് വിധേയമാണെന്നും സാക്ഷ്യപ്പെടുത്തുന്നു. (I explicitly confirm the accuracy of these details.)
+        </label>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        <button type="button" id="btn-back-to-edit" class="btn btn-secondary">← തിരുത്തുക (Edit)</button>
+        <button type="button" id="btn-final-submit" class="btn btn-primary" disabled>
+          ✅ അപേക്ഷ സമർപ്പിക്കുക (Submit Application)
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Submission Confirmation Receipt -->
+    <div id="section-success" class="hidden">
+      <div class="alert alert-success">
+        <strong>🎉 അപേക്ഷ വിജയകരമായി സമർപ്പിച്ചു! (Application Successfully Submitted)</strong>
+      </div>
+
+      <div style="text-align: center; padding: 24px 0;">
+        <p style="color: #666; margin-bottom: 8px;">നിങ്ങളുടെ അപേക്ഷാ നമ്പർ (Application Tracking ID):</p>
+        <div id="application-ref-id" class="ref-code">AIMS-KL-2026-000000</div>
+        <p style="margin-top: 14px; font-size: 0.9rem; color: #555;">
+          കൃഷിഭവൻ ഉദ്യോഗസ്ഥർ നിങ്ങളുടെ പാടം പരിശോധിച്ച് അർഹമായ തുക ബാങ്ക് അക്കൗണ്ടിലേക്ക് നൽകുന്നതാണ്.
+        </p>
+        <p style="margin-top: 8px; font-size: 0.85rem; color: #777;" id="submission-timestamp-display"></p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Portal Logic
+    const formSec = document.getElementById('section-form');
+    const reviewSec = document.getElementById('section-review');
+    const successSec = document.getElementById('section-success');
+    const gotoReviewBtn = document.getElementById('btn-goto-review');
+    const backBtn = document.getElementById('btn-back-to-edit');
+    const submitBtn = document.getElementById('btn-final-submit');
+    const confirmCheck = document.getElementById('farmer-confirmation-checkbox');
+
+    gotoReviewBtn.addEventListener('click', () => {
+      // Validate
+      const name = document.getElementById('farmer-name').value.trim();
+      const aadhaar = document.getElementById('farmer-aadhaar').value.trim();
+      const phone = document.getElementById('farmer-phone').value.trim();
+      const district = document.getElementById('district-select').value;
+      const crop = document.getElementById('crop-type').value;
+      const land = document.getElementById('land-area-cents').value;
+      const bank = document.getElementById('bank-account').value.trim();
+      const ifsc = document.getElementById('ifsc-code').value.trim();
+
+      if (!name || !aadhaar || !phone || !district || !land || !bank || !ifsc) {
+        alert('ദയവായി എല്ലാ വിവരങ്ങളും പൂരിപ്പിക്കുക.');
+        return;
+      }
+
+      // Populate review table
+      document.getElementById('rev-farmer-name').textContent = name;
+      document.getElementById('rev-farmer-aadhaar').textContent = aadhaar;
+      document.getElementById('rev-farmer-phone').textContent = phone;
+      document.getElementById('rev-district').textContent = district;
+      document.getElementById('rev-crop').textContent = crop === 'paddy' ? 'നെല്ല് (Paddy)' : crop;
+      document.getElementById('rev-land-area').textContent = `${land} സെൻ്റ് (${(land * 0.004047).toFixed(3)} ഹെക്ടർ)`;
+      document.getElementById('rev-bank-account').textContent = bank;
+      document.getElementById('rev-ifsc').textContent = ifsc;
+
+      formSec.classList.add('hidden');
+      reviewSec.classList.remove('hidden');
+      document.getElementById('step-1-label').classList.remove('active');
+      document.getElementById('step-2-label').classList.add('active');
+    });
+
+    backBtn.addEventListener('click', () => {
+      reviewSec.classList.add('hidden');
+      formSec.classList.remove('hidden');
+      document.getElementById('step-2-label').classList.remove('active');
+      document.getElementById('step-1-label').classList.add('active');
+    });
+
+    confirmCheck.addEventListener('change', () => {
+      submitBtn.disabled = !confirmCheck.checked;
+    });
+
+    submitBtn.addEventListener('click', () => {
+      if (!confirmCheck.checked) return;
+
+      const randomId = Math.floor(100000 + Math.random() * 900000);
+      const appRef = `AIMS-KL-2026-${randomId}`;
+      document.getElementById('application-ref-id').textContent = appRef;
+      document.getElementById('submission-timestamp-display').textContent = `സമർപ്പിച്ച സമയം: ${new Date().toLocaleString()}`;
+
+      reviewSec.classList.add('hidden');
+      successSec.classList.remove('hidden');
+      document.getElementById('step-2-label').classList.remove('active');
+      document.getElementById('step-3-label').classList.add('active');
+
+      // Dispatch custom event for testing / automation
+      window.__aims_submission_result = {
+        applicationId: appRef,
+        status: 'SUBMITTED_SUCCESS',
+        timestamp: new Date().toISOString()
+      };
+    });
+  </script>
+</body>
+</html>
