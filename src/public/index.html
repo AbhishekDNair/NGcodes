@@ -1,16 +1,25 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="കർഷക കെയർ - കേരളത്തിലെ കർഷകർക്കായുള്ള ഓഫ്‌ലൈൻ കാർഷിക നിർണ്ണയ സഹായി (Karshaka Care Agricultural Decision Agent)">
-  <title>കർഷക കെയർ | Karshaka Care - കാർഷിക നിർണ്ണയ സഹായി</title>
+  <meta name="description" content="Karshaka Care - Agricultural Decision Support Agent for Kerala Farmers">
+  <title>Karshaka Care - Agricultural Decision Support Agent</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap" rel="stylesheet">
   <meta name="theme-color" content="#1b4d3e">
   <link rel="manifest" href="/manifest.json">
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/styles.css?v=20261011_v11">
+  <script>
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => {
+          if (name !== 'karshaka-care-v11') caches.delete(name);
+        });
+      });
+    }
+  </script>
 </head>
 <body>
   <!-- Header -->
@@ -19,48 +28,52 @@
       <div class="brand-group">
         <div class="brand-logo" aria-hidden="true">🌾</div>
         <div class="brand-text">
-          <h1 class="brand-title">കർഷക കെയർ <span class="brand-badge">Karshaka Care</span></h1>
-          <p class="brand-subtitle" id="header-subtitle">നെൽകൃഷി തീരുമാനങ്ങൾ നിങ്ങളുടെ ഭാഷയിൽ • ഓഫ്‌ലൈനിലും ലഭ്യമാണ്</p>
+          <h1 class="brand-title">Karshaka Care <span class="brand-badge">Karshaka Care</span></h1>
+          <p class="brand-subtitle" id="header-subtitle" data-i18n="header_subtitle">Paddy farming decisions in your language • Works offline too</p>
         </div>
       </div>
       <div class="header-actions">
-        <div id="connectivity-status" class="status-indicator status-online" title="കണക്ഷൻ നില">
+        <div id="connectivity-status" class="status-indicator status-online" title="Connection Status">
           <span class="status-dot"></span>
-          <span id="connectivity-text" class="status-label">ഓൺലൈൻ (Online)</span>
+          <span id="connectivity-text" class="status-label">Online</span>
         </div>
-        <button id="lang-toggle-btn" class="btn btn-secondary btn-sm" aria-label="ഭാഷ മാറ്റുക (Toggle Language)">
-          <span id="lang-toggle-label">English</span>
+        <button id="lang-toggle-btn" class="btn btn-secondary btn-sm" aria-label="Toggle Language">
+          <span id="lang-toggle-label">Malayalam</span>
         </button>
       </div>
     </div>
   </header>
 
   <!-- Navigation -->
-  <nav class="app-nav" aria-label="പ്രധാന വഴികാട്ടി">
+  <nav class="app-nav" aria-label="Main Navigation">
     <div class="nav-container">
       <button id="nav-home" class="nav-item active" data-view="home">
         <span class="nav-icon">🏠</span>
-        <span class="nav-text" data-i18n="nav_home">ഹോം & സംശയങ്ങൾ</span>
+        <span class="nav-text" data-i18n="nav_home">Home & Queries</span>
       </button>
       <button id="nav-crop" class="nav-item" data-view="crop-analysis">
         <span class="nav-icon">🔍</span>
-        <span class="nav-text" data-i18n="nav_crop">വിള പരിശോധന</span>
+        <span class="nav-text" data-i18n="nav_crop">Crop Analysis</span>
       </button>
       <button id="nav-farmlog" class="nav-item" data-view="farmlog">
         <span class="nav-icon">📔</span>
-        <span class="nav-text" data-i18n="nav_farmlog">ഫാം ലോഗ്</span>
+        <span class="nav-text" data-i18n="nav_farmlog">FarmLog</span>
       </button>
       <button id="nav-weather" class="nav-item" data-view="weather">
         <span class="nav-icon">🌦️</span>
-        <span class="nav-text" data-i18n="nav_weather">കാലാവസ്ഥ</span>
+        <span class="nav-text" data-i18n="nav_weather">Weather</span>
       </button>
       <button id="nav-schemes" class="nav-item" data-view="schemes">
         <span class="nav-icon">🏛️</span>
-        <span class="nav-text" data-i18n="nav_schemes">സർക്കാർ പദ്ധതികൾ</span>
+        <span class="nav-text" data-i18n="nav_schemes">Government Schemes</span>
       </button>
-      <button id="nav-traces" class="nav-item" data-view="traces">
+      <button id="nav-disaster" class="nav-item" data-view="disaster">
+        <span class="nav-icon">🚨</span>
+        <span class="nav-text" data-i18n="nav_disaster">Disaster Radar</span>
+      </button>
+      <button id="nav-traces" class="nav-item" data-view="traces" style="display:none">
         <span class="nav-icon">⚙️</span>
-        <span class="nav-text" data-i18n="nav_traces">പ്രവർത്തന രേഖ (MCP)</span>
+        <span class="nav-text" data-i18n="nav_traces">Activity Log (MCP)</span>
       </button>
     </div>
   </nav>
@@ -72,10 +85,10 @@
     <section id="view-home" class="view-panel active">
       <div class="hero-card">
         <div class="hero-content">
-          <span class="hero-tag">🌾 കേരള കാർഷിക സർവ്വകലാശാല (KAU) നിർദ്ദേശങ്ങൾ അടിസ്ഥാനമാക്കി</span>
-          <h2 class="hero-title" id="home-greeting">എന്താണ് ഇന്ന് നിങ്ങളുടെ പാടത്തെ സംശയം?</h2>
-          <p class="hero-desc" id="home-instructions">
-            ചോദ്യങ്ങൾ മലയാളത്തിൽ ചോദിക്കുക, അല്ലെങ്കിൽ താഴെ നൽകിയിട്ടുള്ള സാധാരണ സംശയങ്ങൾ തിരഞ്ഞെടുക്കുക. കൃത്യവും ശാസ്ത്രീയവുമായ മറുപടി തത്സമയം ലഭിക്കും.
+          <span class="hero-tag" data-i18n="hero_tag">🌾 Based on Kerala Agricultural University (KAU) Guidelines</span>
+          <h2 class="hero-title" id="home-greeting" data-i18n="home_greeting">What is your paddy field concern today?</h2>
+          <p class="hero-desc" id="home-instructions" data-i18n="home_instructions">
+            Ask questions in Malayalam or English, or select common questions below. Accurate scientific guidance will be provided instantly.
           </p>
           
           <!-- Malayalam Question Consultation Form -->
@@ -85,38 +98,39 @@
                 id="advisor-query-input" 
                 class="query-textarea" 
                 rows="2" 
-                placeholder="ഉദാ: ഇലകളിൽ തവിട്ടുനിറത്തിലുള്ള പുള്ളികൾ കാണുന്നു, എന്ത് ചെയ്യണം?"
-                aria-label="കാർഷിക സംശയം രേഖപ്പെടുത്തുക"
+                placeholder="e.g., Brown spots found on leaves, what should I do?"
+                data-i18n-placeholder="ask_placeholder"
+                aria-label="Enter agricultural query"
                 required></textarea>
               <div class="input-actions">
-                <button type="button" id="voice-input-btn" class="btn btn-icon btn-voice" title="സംസാരിച്ചു ചോദിക്കുക (Voice Input)" aria-label="വോയ്സ് ഇൻപുട്ട്">
+                <button type="button" id="voice-input-btn" class="btn btn-icon btn-voice" title="Voice Input" aria-label="Voice Input">
                   🎙️
                 </button>
                 <button type="submit" id="advisor-submit-btn" class="btn btn-primary">
-                  <span id="submit-btn-text">ചോദിക്കുക (Ask)</span>
+                  <span id="submit-btn-text" data-i18n="ask_btn">Ask Question</span>
                 </button>
               </div>
             </div>
             <div id="voice-listening-indicator" class="voice-indicator hidden">
-              <span class="pulse-dot"></span> <span id="voice-indicator-text">ശ്രദ്ധിക്കുന്നു... ദയവായി മലയാളത്തിൽ സംസാരിക്കുക</span>
+              <span class="pulse-dot"></span> <span id="voice-indicator-text" data-i18n="voice_indicator_text">Listening... Please speak your question</span>
             </div>
           </form>
 
           <!-- Quick Query Chips -->
           <div class="quick-chips-group">
-            <span class="chips-label">സാധാരണ സംശയങ്ങൾ:</span>
+            <span class="chips-label" data-i18n="chips_label">Common Queries:</span>
             <div class="chips-list">
-              <button class="chip-btn" data-query="ഇലകളിൽ തവിട്ടുനിറത്തിലുള്ള പുള്ളികൾ കാണുന്നു, എന്ത് ചെയ്യണം?">
-                🍂 ഇലപ്പുള്ളി രോഗം (Brown Spot)
+              <button class="chip-btn" data-chip="brown_spot" data-query-ml="ഇലകളിൽ തവിട്ടുനിറത്തിലുള്ള പുള്ളികൾ കാണുന്നു, എന്ത് ചെയ്യണം?" data-query-en="Brown spots found on leaves, what should I do?" data-query="Brown spots found on leaves, what should I do?">
+                <span data-i18n="chip_brown_spot">🍂 Brown Spot</span>
               </button>
-              <button class="chip-btn" data-query="ഇലകൾ കരിഞ്ഞുണങ്ങുന്നു, സ്പിൻഡിൽ ആകൃതിയിലുള്ള പാടുകളുണ്ട്">
-                🌾 ഇലക്കരിച്ചിൽ (Leaf Blast)
+              <button class="chip-btn" data-chip="blast" data-query-ml="ഇലകൾ കരിഞ്ഞുണങ്ങുന്നു, സ്പിൻഡിൽ ആകൃതിയിലുള്ള പാടുകളുണ്ട്" data-query-en="Leaves drying with spindle-shaped lesions, what should I do?" data-query="Leaves drying with spindle-shaped lesions, what should I do?">
+                <span data-i18n="chip_blast">🌾 Leaf Blast</span>
               </button>
-              <button class="chip-btn" data-query="മഴ പെയ്യാൻ സാധ്യതയുണ്ട്, ഇപ്പോൾ യൂറിയ വളം വിതറാമോ?">
-                🌧️ മഴയും വളപ്രയോഗവും (Rain & Fertilizer)
+              <button class="chip-btn" data-chip="rain" data-query-ml="മഴ പെയ്യാൻ സാധ്യതയുണ്ട്, ഇപ്പോൾ യൂറിയ വളം വിതറാമോ?" data-query-en="Rain expected, can I apply urea fertilizer now?" data-query="Rain expected, can I apply urea fertilizer now?">
+                <span data-i18n="chip_rain">🌧️ Rain & Fertilizer</span>
               </button>
-              <button class="chip-btn" data-query="ചിനപ്പുപൊട്ടൽ ഘട്ടത്തിൽ പാടത്ത് എത്ര വെള്ളം നിർത്തണം?">
-                💧 ജലക്രമീകരണം (Water Management)
+              <button class="chip-btn" data-chip="water" data-query-ml="ചിനപ്പുപൊട്ടൽ ഘട്ടത്തിൽ പാടത്ത് എത്ര വെള്ളം നിർത്തണം?" data-query-en="How much water should be maintained during tillering stage?" data-query="How much water should be maintained during tillering stage?">
+                <span data-i18n="chip_water">💧 Water Management</span>
               </button>
             </div>
           </div>
@@ -127,37 +141,37 @@
       <div id="advisor-result-container" class="advisor-result-card hidden">
         <div class="result-header">
           <div class="result-badge-wrap">
-            <span id="result-outcome-badge" class="badge badge-success">നിർദ്ദേശം</span>
-            <span id="result-category-label" class="badge badge-secondary">നെൽകൃഷി</span>
+            <span id="result-outcome-badge" class="badge badge-success" data-i18n="result_badge_advisory">Advisory</span>
+            <span id="result-category-label" class="badge badge-secondary" data-i18n="result_badge_category">Paddy Farming</span>
           </div>
-          <span id="result-timestamp" class="result-time">തത്സമയം</span>
+          <span id="result-timestamp" class="result-time" data-i18n="result_time">Live</span>
         </div>
-        <h3 id="result-summary-heading" class="result-title">നിർണ്ണയ ഫലം</h3>
+        <h3 id="result-summary-heading" class="result-title" data-i18n="result_title">Diagnostic Summary</h3>
         <p id="result-summary-text" class="result-summary"></p>
         
         <div class="result-actions-block">
-          <h4>പരിഹാര മാർഗ്ഗങ്ങൾ (Action Steps):</h4>
+          <h4 data-i18n="action_steps_heading">Recommended Action Steps:</h4>
           <ul id="result-action-steps" class="action-steps-list"></ul>
         </div>
 
         <div id="result-safety-warning-wrap" class="safety-alert">
           <span class="safety-icon">⚠️</span>
-          <span id="result-safety-warning">അനാവശ്യമായി കീടനാശിനികൾ ഉപയോഗിക്കരുത്.</span>
+          <span id="result-safety-warning" data-i18n="safety_default">Avoid unnecessary use of chemical pesticides.</span>
         </div>
 
         <div class="result-footer">
           <div class="result-footer-left">
-            <span class="citation-text">📚 ആധാരം: <span id="result-citation-source">KAU Package of Practices</span></span>
+            <span class="citation-text"><span data-i18n="citation_label">📚 Source:</span> <span id="result-citation-source">KAU Package of Practices</span></span>
             <div id="voice-latency-container" class="latency-pill hidden">
               ⏱️ <span id="voice-latency-text">Total: 42ms (Engine: 1.2ms)</span>
             </div>
           </div>
           <div class="result-footer-actions">
-            <button id="btn-speak-advice" type="button" class="btn btn-secondary btn-sm" title="ശബ്ദത്തിൽ കേൾക്കുക (Listen)">
-              🔊 വായിക്കുക (Speak)
+            <button id="btn-speak-advice" type="button" class="btn btn-secondary btn-sm" title="Listen (Speak)">
+              🔊 <span data-i18n="btn_speak">Listen (Speak)</span>
             </button>
             <button id="btn-save-query-to-log" class="btn btn-secondary btn-sm">
-              💾 ഫാം ലോഗിലേക്ക് ചേർക്കുക
+              💾 <span data-i18n="btn_save_log">Save to FarmLog</span>
             </button>
           </div>
         </div>
@@ -167,25 +181,28 @@
       <div class="dashboard-grid">
         <article class="dash-card">
           <div class="card-header">
-            <h3>🌾 നിലവിലെ വിള (Active Field)</h3>
-            <span class="tag tag-paddy">നെല്ല് / Paddy</span>
+            <h3 data-i18n="dash_active_crop_title">🌾 Active Field</h3>
+            <span class="tag tag-paddy" data-i18n="dash_paddy_tag">Paddy</span>
           </div>
-          <p class="card-meta">സ്ഥലം: കുട്ടനാട്, ആലപ്പുഴ (Kuttanad, Alappuzha)</p>
-          <p class="card-detail">വളർച്ചാ ഘട്ടം: <strong>ചിനപ്പുപൊട്ടൽ ഘട്ടം (Tillering Stage)</strong></p>
+          <p class="card-meta" data-i18n="dash_location">Location: Kuttanad, Alappuzha</p>
+          <p class="card-detail"><span data-i18n="dash_stage_label">Growth Stage:</span> <strong data-i18n="dash_stage_val">Tillering Stage</strong></p>
           <div class="card-action-link">
-            <a href="#crop" class="inline-link" id="link-goto-crop">ഇലകളുടെ ഫോട്ടോ പരിശോധിക്കാൻ ഇവിടെ ക്ലിക്ക് ചെയ്യുക →</a>
+            <a href="#crop" class="inline-link" id="link-goto-crop" data-i18n="link_goto_crop">Click here to inspect leaf photos →</a>
           </div>
         </article>
 
         <article class="dash-card">
           <div class="card-header">
-            <h3>🌦️ കാലാവസ്ഥാ വിവരങ്ങൾ</h3>
-            <span id="weather-badge" class="tag tag-info">കുട്ടനാട് കേന്ദ്രം</span>
+            <h3 data-i18n="dash_weather_title">🌦️ Weather Details</h3>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span id="weather-badge" class="tag tag-info">Kuttanad (Moncompu), Alappuzha • Live</span>
+              <button id="btn-refresh-weather-home" class="btn-refresh-home" title="Live Refresh" aria-label="Refresh Weather">🔄</button>
+            </div>
           </div>
           <div id="home-weather-summary" class="card-weather-summary">
-            <div class="weather-temp">28°C</div>
-            <div class="weather-condition">മേഘാവൃതം • 82% ആർദ്രത</div>
-            <p class="weather-advisory">ശ്രദ്ധിക്കുക: അടുത്ത 24 മണിക്കൂറിൽ ശക്തമായ മഴയ്ക്ക് സാധ്യതയുള്ളതിനാൽ വളപ്രയോഗം ഒഴിവാക്കുക.</p>
+            <div class="weather-temp">27.5°C</div>
+            <div class="weather-condition" data-i18n="weather_loading">🌦️ Drizzle • 99% Humidity • 4 km/h Wind</div>
+            <p class="weather-advisory" data-i18n="weather_adv_checking">Weather Alert: Currently raining. Immediately postpone fertilizer or pesticide application; regulate water levels in the field.</p>
           </div>
         </article>
       </div>
@@ -195,9 +212,9 @@
     <section id="view-crop-analysis" class="view-panel hidden">
       <div class="section-card">
         <div class="section-header">
-          <h2>🔍 ഇല രോഗനിർണ്ണയം (Local Edge AI Leaf Analysis)</h2>
-          <p class="section-subtitle">
-            നെൽച്ചെടിയുടെ രോഗബാധയുള്ള ഇലയുടെ ചിത്രം നൽകുക. ഇൻറർനെറ്റ് ഇല്ലാതെ പ്രവർത്തിക്കുന്ന ലോക്കൽ മോഡൽ വഴി കൃത്യമായ രോഗനിർണ്ണയം സാധ്യമാകും.
+          <h2 data-i18n="crop_section_title">Leaf Disease Diagnosis (Local Edge AI Leaf Analysis)</h2>
+          <p class="section-subtitle" data-i18n="crop_section_sub">
+            Upload an image of the affected paddy leaf. Our offline-capable local edge model provides fast, accurate disease diagnosis without requiring internet access.
           </p>
         </div>
 
@@ -209,44 +226,45 @@
               <input type="file" id="leaf-image-input" accept="image/jpeg,image/png,image/webp" class="file-input-hidden">
               <div class="dropzone-content" id="dropzone-empty-state">
                 <span class="dropzone-icon">📷</span>
-                <p class="dropzone-title">ഇലയുടെ ഫോട്ടോ തിരഞ്ഞെടുക്കുക അല്ലെങ്കിൽ ഇവിടെ ഇടുക</p>
-                <p class="dropzone-hint">പിന്തുണയ്ക്കുന്ന ഫോർമാറ്റുകൾ: JPG, PNG, WebP (പരമാവധി 10MB)</p>
+                <p class="dropzone-title" data-i18n="dropzone_title">Choose a leaf photo or drag and drop here</p>
+                <p class="dropzone-hint" data-i18n="dropzone_hint">Supported formats: JPG, PNG, WebP (Max 10MB)</p>
                 <div class="dropzone-actions-row">
-                  <button type="button" class="btn btn-secondary btn-sm" id="btn-browse-file">ഫയൽ തിരഞ്ഞെടുക്കുക</button>
-                  <button type="button" class="btn btn-accent btn-sm" id="btn-load-sample-leaf">🌾 മാതൃകാ ഇല പരിശോധിക്കുക (Sample Leaf)</button>
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-browse-file" data-i18n="btn_browse_file">Select File</button>
+                  <button type="button" class="btn btn-accent btn-sm" id="btn-load-sample-leaf" data-i18n="btn_sample_leaf">🌾 Test Sample Leaf</button>
                 </div>
               </div>
               <div class="dropzone-preview hidden" id="dropzone-preview-state">
-                <img id="image-preview" src="" alt="തിരഞ്ഞെടുത്ത ഇലയുടെ ഫോട്ടോ" class="preview-img">
-                <button type="button" id="btn-remove-preview" class="btn btn-secondary btn-sm preview-remove-btn">മാറ്റുക ✕</button>
+                <img id="image-preview" src="" alt="Selected leaf photo" class="preview-img">
+                <button type="button" id="btn-remove-preview" class="btn btn-secondary btn-sm preview-remove-btn" data-i18n="btn_remove_preview">Remove ✕</button>
               </div>
             </div>
 
             <!-- Context Inputs -->
             <div class="context-grid">
               <div class="form-group">
-                <label for="crop-stage-select" class="form-label">വളർച്ചാ ഘട്ടം (Growth Stage):</label>
+                <label for="crop-stage-select" class="form-label" data-i18n="label_crop_stage">Growth Stage:</label>
                 <select id="crop-stage-select" class="form-select">
-                  <option value="tillering" selected>ചിനപ്പുപൊട്ടൽ ഘട്ടം (Tillering Stage)</option>
-                  <option value="seedling">മുളപ്പൊട്ടൽ ഘട്ടം (Seedling Stage)</option>
-                  <option value="panicle">കതിരിടൽ ഘട്ടം (Panicle Initiation)</option>
-                  <option value="ripening">മൂപ്പെത്തൽ ഘട്ടം (Ripening Stage)</option>
+                  <option value="tillering" selected data-i18n="opt_stage_tillering">Tillering Stage</option>
+                  <option value="seedling" data-i18n="opt_stage_seedling">Seedling Stage</option>
+                  <option value="panicle" data-i18n="opt_stage_panicle">Panicle Initiation</option>
+                  <option value="flowering" data-i18n="opt_stage_flowering">Flowering Stage</option>
+                  <option value="ripening" data-i18n="opt_stage_ripening">Maturity</option>
                 </select>
               </div>
 
               <div class="form-group">
-                <label class="form-label">നിരീക്ഷിച്ച പ്രധാന ലക്ഷണങ്ങൾ (Observed Symptoms):</label>
+                <label class="form-label" data-i18n="label_symptoms">Observed Symptoms:</label>
                 <div class="checkbox-group">
-                  <label class="checkbox-label"><input type="checkbox" name="symptom" value="spots" checked> ഇലകളിൽ പുള്ളികൾ (Spots)</label>
-                  <label class="checkbox-label"><input type="checkbox" name="symptom" value="drying"> ഇല കരിയൽ (Drying)</label>
-                  <label class="checkbox-label"><input type="checkbox" name="symptom" value="yellowing"> മഞ്ഞളിപ്പ് (Yellowing)</label>
-                  <label class="checkbox-label"><input type="checkbox" name="symptom" value="wilting"> വാട്ടം (Wilting)</label>
+                  <label class="checkbox-label"><input type="checkbox" name="symptom" value="spots" checked> <span data-i18n="symp_spots">Leaf Spots</span></label>
+                  <label class="checkbox-label"><input type="checkbox" name="symptom" value="drying"> <span data-i18n="symp_drying">Leaf Scorching / Drying</span></label>
+                  <label class="checkbox-label"><input type="checkbox" name="symptom" value="yellowing"> <span data-i18n="symp_yellowing">Yellowing</span></label>
+                  <label class="checkbox-label"><input type="checkbox" name="symptom" value="wilting"> <span data-i18n="symp_wilting">Wilting</span></label>
                 </div>
               </div>
             </div>
 
-            <button type="button" id="btn-run-inference" class="btn btn-primary btn-block">
-              ⚡ ഇല പരിശോധിക്കുക (Analyze Leaf)
+            <button type="button" id="btn-run-inference" class="btn btn-primary btn-block" data-i18n="btn_run_inference">
+              ⚡ Analyze Leaf
             </button>
           </div>
 
@@ -254,49 +272,49 @@
           <div class="analysis-output-column">
             <div id="inference-idle-box" class="placeholder-card">
               <span class="placeholder-icon">🌱</span>
-              <h3>രോഗനിർണ്ണയ വിവരങ്ങൾ</h3>
-              <p>ഫോട്ടോ അപ്‌ലോഡ് ചെയ്ത് "ഇല പരിശോധിക്കുക" ക്ലിക്ക് ചെയ്യുമ്പോൾ ഇവിടെ ഫലം ദൃശ്യമാകും.</p>
+              <h3 data-i18n="idle_title">Diagnosis Details</h3>
+              <p data-i18n="idle_desc">Upload a photo and click 'Analyze Leaf' to view diagnostic results and recommendations here.</p>
               <div class="supported-classes-list">
-                <span class="sub-heading">പിന്തുണയ്ക്കുന്ന രോഗങ്ങൾ:</span>
+                <span class="sub-heading" data-i18n="supported_heading">Supported Conditions:</span>
                 <ul>
-                  <li>ഇലപ്പുള്ളി രോഗം (Brown Spot)</li>
-                  <li>ഇലക്കരിച്ചിൽ (Rice Blast)</li>
-                  <li>ബാക്ടീരിയൽ ഇലവാട്ടം (Bacterial Leaf Blight)</li>
-                  <li>ആരോഗ്യമുള്ള ഇല (Healthy Leaf)</li>
+                  <li data-i18n="dis_brown_spot">Brown Spot</li>
+                  <li data-i18n="dis_blast">Rice Blast</li>
+                  <li data-i18n="dis_blb">Bacterial Leaf Blight</li>
+                  <li data-i18n="dis_healthy">Healthy Leaf</li>
                 </ul>
               </div>
             </div>
 
             <div id="inference-result-box" class="inference-result-card hidden">
               <div class="result-header">
-                <span id="inference-category-badge" class="badge badge-success">രോഗനിർണ്ണയം</span>
-                <span id="inference-confidence-pill" class="pill-confidence">വിശ്വാസ്യത: 92%</span>
+                <span id="inference-category-badge" class="badge badge-success" data-i18n="inf_diag_badge">Diagnosis</span>
+                <span id="inference-confidence-pill" class="pill-confidence">Confidence: 92%</span>
               </div>
-              <h3 id="inference-disease-name" class="disease-title">തവിട്ടു പുള്ളി രോഗം (Brown Spot)</h3>
+              <h3 id="inference-disease-name" class="disease-title">Brown Spot</h3>
               <p id="inference-disease-desc" class="disease-desc"></p>
 
               <div class="metric-row">
                 <div class="metric-item">
-                  <span class="metric-label">മോഡൽ:</span>
+                  <span class="metric-label" data-i18n="metric_model">Model:</span>
                   <span class="metric-val" id="inference-model-id">ONNX MobileNetV2 Rice</span>
                 </div>
                 <div class="metric-item">
-                  <span class="metric-label">എടുത്തെടുത്ത സമയം:</span>
+                  <span class="metric-label" data-i18n="metric_latency">Inference Latency:</span>
                   <span class="metric-val" id="inference-duration">18ms</span>
                 </div>
                 <div class="metric-item">
-                  <span class="metric-label">റൺടൈം:</span>
-                  <span class="metric-val">ലോക്കൽ എഡ്ജ് (Local CPU)</span>
+                  <span class="metric-label" data-i18n="metric_runtime">Runtime:</span>
+                  <span class="metric-val" data-i18n="metric_runtime_val">Local Edge (Local CPU)</span>
                 </div>
               </div>
 
               <div class="actions-box">
-                <h4>നിർദ്ദേശിച്ച തുടർനടപടി (Action Plan):</h4>
+                <h4 data-i18n="inf_action_heading">Action Plan:</h4>
                 <ul id="inference-action-list" class="action-steps-list"></ul>
               </div>
 
-              <button type="button" id="btn-save-inference-log" class="btn btn-secondary btn-block">
-                💾 ഫാം ലോഗിലേക്ക് സേവ് ചെയ്യുക
+              <button type="button" id="btn-save-inference-log" class="btn btn-secondary btn-block" data-i18n="btn_save_inf_log">
+                💾 Save to FarmLog
               </button>
             </div>
           </div>
@@ -308,86 +326,158 @@
     <section id="view-farmlog" class="view-panel hidden">
       <div class="section-card">
         <div class="section-header">
-          <h2>📔 ഫാം ലോഗ് (FarmLog - പാടത്തെ ഓർമ്മപ്പുസ്തകം)</h2>
-          <p class="section-subtitle">
-            നിങ്ങളുടെ പാടത്തെ നിരീക്ഷണങ്ങളും ചെയ്ത കൃഷിപ്പണികളും ഇവിടെ സുരക്ഷിതമായി രേഖപ്പെടുത്താം. ഇൻറർനെറ്റ് ഇല്ലാതെയും ഇവ ലഭ്യമാണ്.
+          <h2 data-i18n="farmlog_title">FarmLog (Field Activity Journal)</h2>
+          <p class="section-subtitle" data-i18n="farmlog_sub">
+            Securely log field observations, spray events, and farm activities. Fully accessible and stored locally even without an internet connection.
           </p>
         </div>
 
         <!-- Add Entry Form -->
         <div class="farmlog-add-box">
-          <h3>പുതിയ നിരീക്ഷണം രേഖപ്പെടുത്തുക</h3>
+          <h3 data-i18n="farmlog_add_heading">Record New Activity / Observation</h3>
           <form id="farmlog-form" class="farmlog-form-grid">
             <div class="form-group">
-              <label for="farmlog-crop-stage" class="form-label">വളർച്ചാ ഘട്ടം:</label>
+              <label for="farmlog-crop-stage" class="form-label" data-i18n="farmlog_stage_label">Growth Stage:</label>
               <select id="farmlog-crop-stage" class="form-select">
-                <option value="tillering">ചിനപ്പുപൊട്ടൽ ഘട്ടം (Tillering)</option>
-                <option value="seedling">മുളപ്പൊട്ടൽ ഘട്ടം (Seedling)</option>
-                <option value="panicle">കതിരിടൽ ഘട്ടം (Panicle)</option>
-                <option value="ripening">മൂപ്പെത്തൽ ഘട്ടം (Ripening)</option>
+                <option value="tillering" selected data-i18n="opt_stage_tillering">Tillering Stage</option>
+                <option value="seedling" data-i18n="opt_stage_seedling">Seedling Stage</option>
+                <option value="panicle" data-i18n="opt_stage_panicle">Panicle Initiation</option>
+                <option value="flowering" data-i18n="opt_stage_flowering">Flowering Stage</option>
+                <option value="ripening" data-i18n="opt_stage_ripening">Maturity</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="farmlog-entry-type" class="form-label">രേഖപ്പെടുത്തൽ തരം:</label>
+              <label for="farmlog-entry-type" class="form-label" data-i18n="farmlog_type_label">Entry Type:</label>
               <select id="farmlog-entry-type" class="form-select">
-                <option value="observation">കർഷകന്റെ നിരീക്ഷണം (Observation)</option>
-                <option value="action_confirmed">പൂർത്തിയാക്കിയ കൃഷിപ്പണി (Completed Activity)</option>
+                <option value="observation" selected data-i18n="opt_type_obs">Farmer Observation</option>
+                <option value="action_confirmed" data-i18n="opt_type_act">Completed Task</option>
+                <option value="treatment" data-i18n="opt_type_treatment">Treatment / Spray</option>
+                <option value="irrigation" data-i18n="opt_type_irrigation">Irrigation</option>
+                <option value="fertilizer" data-i18n="opt_type_fertilizer">Fertilizer</option>
               </select>
             </div>
             <div class="form-group full-width">
-              <label for="farmlog-notes" class="form-label">വിശദാംശങ്ങൾ:</label>
-              <input type="text" id="farmlog-notes" class="form-input" placeholder="ഉദാ: പാടത്ത് രണ്ടാം തവണ പൊട്ടാഷ് വളം നൽകി, വെള്ളം വാർത്തു" required>
+              <label for="farmlog-notes" class="form-label" data-i18n="farmlog_notes_label">Details / Remarks:</label>
+              <input type="text" id="farmlog-notes" class="form-input" placeholder="e.g., Applied second dose of Potash, drained excess field water." data-i18n-placeholder="farmlog_notes_ph" required>
             </div>
             <div class="form-actions">
-              <button type="submit" class="btn btn-primary">➕ ലോഗിലേക്ക് ചേർക്കുക</button>
+              <button type="submit" class="btn btn-primary" data-i18n="btn_add_farmlog">+ Add to Log</button>
             </div>
           </form>
         </div>
 
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- ADAPTIVE FARM PLANNER                                          -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <div class="planner-section" id="farm-planner-section">
+          <div class="planner-header">
+            <div class="planner-header-text">
+              <h3 class="planner-title" data-i18n="planner_title">🗓️ Adaptive Farm Planner</h3>
+              <p class="planner-subtitle" data-i18n="planner_subtitle">AI-assisted, KAU-guideline-based next-step recommendations derived from your FarmLog history and crop stage.</p>
+            </div>
+            <button id="btn-generate-plan" class="btn btn-primary planner-analyze-btn" type="button">
+              <span id="planner-btn-icon">🔍</span>
+              <span id="planner-btn-text" data-i18n="btn_generate_plan">Analyze Farm & Generate Plan</span>
+            </button>
+          </div>
+
+          <!-- Stage picker inside planner (synced with FarmLog form) -->
+          <div class="planner-stage-row">
+            <label for="planner-crop-stage" class="form-label" data-i18n="planner_stage_label">Current Crop Stage for Planning:</label>
+            <select id="planner-crop-stage" class="form-select planner-stage-select">
+              <option value="seedling" data-i18n="opt_stage_seedling">Seedling Stage</option>
+              <option value="tillering" selected data-i18n="opt_stage_tillering">Tillering Stage</option>
+              <option value="panicle" data-i18n="opt_stage_panicle">Panicle Initiation</option>
+              <option value="flowering" data-i18n="opt_stage_flowering">Flowering Stage</option>
+              <option value="ripening" data-i18n="opt_stage_ripening">Maturity</option>
+            </select>
+          </div>
+
+          <!-- Results area (hidden until first analysis) -->
+          <div id="planner-results" class="planner-results hidden">
+            <!-- Summary bar -->
+            <div id="planner-summary-bar" class="planner-summary-bar">
+              <span id="planner-stage-badge" class="badge badge-success"></span>
+              <span id="planner-summary-text" class="planner-summary-text"></span>
+              <span id="planner-kau-cite" class="planner-kau-cite"></span>
+            </div>
+
+            <!-- Clarifying Questions (shown when info is insufficient) -->
+            <div id="planner-questions" class="planner-questions hidden">
+              <div class="planner-questions-header">
+                <span>❓</span>
+                <strong data-i18n="planner_questions_heading">Information Needed:</strong>
+              </div>
+              <ul id="planner-questions-list" class="planner-questions-list"></ul>
+            </div>
+
+            <!-- Recommendation Cards -->
+            <div id="planner-recs-container" class="planner-recs-container"></div>
+
+            <!-- Refresh note -->
+            <p class="planner-refresh-note" data-i18n="planner_refresh_note">
+              💡 This plan updates automatically each time you add a new FarmLog entry.
+            </p>
+          </div>
+
+          <!-- Idle state -->
+          <div id="planner-idle" class="planner-idle-state">
+            <span class="planner-idle-icon">🌾</span>
+            <p data-i18n="planner_idle_text">Select your crop stage and click "Analyze Farm & Generate Plan" to see personalized, KAU-backed recommendations.</p>
+          </div>
+        </div>
+
         <!-- History Records -->
         <div class="farmlog-history-section">
-          <h3>മുൻകാല രേഖകൾ (History)</h3>
+          <h3 data-i18n="farmlog_history_heading">Activity History</h3>
           <div id="farmlog-list-container" class="farmlog-list">
             <!-- Sample persistent items -->
             <article class="log-item-card">
               <div class="log-item-header">
-                <span class="badge badge-success">പൂർത്തിയാക്കിയ പണി</span>
-                <span class="log-item-time">ഇന്ന്, രാവിലെ 08:30</span>
+                <span class="badge badge-success" data-i18n="log_completed_act">Completed Task</span>
+                <span class="log-item-time" data-i18n="log_time_today">Today, 08:30 AM</span>
               </div>
-              <p class="log-item-content">ചിനപ്പുപൊട്ടൽ ഘട്ടത്തിൽ പാടത്തെ വെള്ളം 3 സെ.മീ ആയി കുറച്ചു.</p>
-              <span class="log-item-source">ഉറവിടം: കർഷകൻ രേഖപ്പെടുത്തിയത് • ലോക്കൽ സ്റ്റോറേജ്</span>
+              <p class="log-item-content" data-i18n="log_sample_content_1">Submitted AIMS Agricultural Royalty subsidy application. Application Ref: AIMS-KL-2026-585758. Location: Alappuzha, Area: 100 Cents (0.405 Hectares).</p>
+              <span class="log-item-source" data-i18n="log_sample_source_1">Source: aims_browser_agent • Local Storage (SQLite)</span>
             </article>
 
             <article class="log-item-card">
               <div class="log-item-header">
-                <span class="badge badge-secondary">മോഡൽ നിർണ്ണയം</span>
-                <span class="log-item-time">ഇന്നലെ, വൈകുന്നേരം 04:15</span>
+                <span class="badge badge-secondary" data-i18n="log_model_diag">Observation</span>
+                <span class="log-item-time" data-i18n="log_time_yesterday">Yesterday, 04:15 PM</span>
               </div>
-              <p class="log-item-content">ഇലകളിൽ നേരിയ തവിട്ടുപുള്ളി ലക്ഷണങ്ങൾ കണ്ടെത്തി (വിശ്വാസ്യത: 88%). വളർച്ചാ ഘട്ടം: ചിനപ്പുപൊട്ടൽ.</p>
-              <span class="log-item-source">ഉറവിടം: കർഷക കെയർ ലോക്കൽ എഡ്ജ് മോഡൽ</span>
+              <p class="log-item-content" data-i18n="log_sample_content_2">Mild Brown Spot symptoms observed (Confidence: 88%). Growth stage: Tillering.</p>
+              <span class="log-item-source" data-i18n="log_sample_source_2">Source: Karshaka Care Local Edge Model • Local Storage (SQLite)</span>
             </article>
           </div>
         </div>
       </div>
     </section>
 
+
     <!-- 4. WEATHER VIEW -->
     <section id="view-weather" class="view-panel hidden">
       <div class="section-card">
         <div class="section-header">
-          <h2>🌦️ തത്സമയ കാലാവസ്ഥ (Weather via MCP)</h2>
-          <p class="section-subtitle">
-            കേരളത്തിലെ പ്രധാന നെല്ലുൽപ്പാദന മേഖലകളിലെ തത്സമയ കാലാവസ്ഥയും കാർഷിക മുൻകരുതലുകളും.
+          <h2 data-i18n="weather_section_title">Real-Time Weather (Weather via MCP)</h2>
+          <p class="section-subtitle" data-i18n="weather_section_sub">
+            Live weather parameters and farming advisories across major paddy growing zones in Kerala.
           </p>
         </div>
 
-        <div class="weather-selector-wrap">
-          <label for="weather-location-select" class="form-label">മേഖല തിരഞ്ഞെടുക്കുക:</label>
-          <select id="weather-location-select" class="form-select weather-select">
-            <option value="kuttanad" selected>കുട്ടനാട്, ആലപ്പുഴ (Kuttanad, Alappuzha - 9.4981°N, 76.4312°E)</option>
-            <option value="palakkad">പാലക്കാട് (Palakkad - 10.7867°N, 76.6548°E)</option>
-            <option value="thrissur">തൃശ്ശൂർ കോൾനിലങ്ങൾ (Thrissur Kole - 10.5276°N, 76.2144°E)</option>
-          </select>
+        <div class="weather-selector-bar">
+          <div class="weather-selector-wrap">
+            <label for="weather-location-select" class="form-label" data-i18n="weather_select_label">Select Rice Region:</label>
+            <select id="weather-location-select" class="form-select weather-select">
+              <option value="kuttanad" selected data-i18n="loc_kuttanad">Kuttanad - Mankombu (Alappuzha - 9.5008°N, 76.4526°E)</option>
+              <option value="palakkad" data-i18n="loc_palakkad">Palakkad (10.7867°N, 76.6548°E)</option>
+              <option value="thrissur" data-i18n="loc_thrissur">Thrissur Kole Wetlands (10.5276°N, 76.2144°E)</option>
+            </select>
+          </div>
+          <button id="btn-refresh-weather" class="btn-refresh-weather" title="Live Refresh Satellite Data">
+            <span id="refresh-spinner-icon">🔄</span>
+            <span id="refresh-btn-text" data-i18n="weather_refresh_btn">Live Refresh</span>
+          </button>
         </div>
 
         <div class="weather-display-grid">
@@ -395,21 +485,21 @@
             <span class="weather-icon-large">🌧️</span>
             <div class="weather-reading">
               <span class="weather-temp-large">28°C</span>
-              <span class="weather-desc-large">മിതമായ മഴയ്ക്ക് സാധ്യത (Light Showers)</span>
+              <span class="weather-desc-large">Light Showers</span>
             </div>
             <div class="weather-details-row">
-              <div class="w-detail"><span>ആർദ്രത (Humidity):</span> <strong>82%</strong></div>
-              <div class="w-detail"><span>കാറ്റിന്റെ വേഗത:</span> <strong>14 km/h</strong></div>
-              <div class="w-detail"><span>മഴ സാധ്യത:</span> <strong>70%</strong></div>
+              <div class="w-detail"><span data-i18n="weather_humidity_label">Humidity:</span> <strong>82%</strong></div>
+              <div class="w-detail"><span data-i18n="weather_wind_label">Wind Speed:</span> <strong>14 km/h</strong></div>
+              <div class="w-detail"><span data-i18n="weather_rain_prob_label">Rain Probability:</span> <strong>70%</strong></div>
             </div>
           </div>
 
           <div class="weather-advisory-card">
-            <h3>🌾 കാർഷിക നിർദ്ദേശം (Advisory)</h3>
-            <p>അടുത്ത 24 മണിക്കൂറിൽ മഴയ്ക്ക് സാധ്യതയുള്ളതിനാൽ പാടത്ത് യൂറിയ വിതറുന്നത് ഒഴിവാക്കുക. ഡ്രെയിനേജ് ചാലുകളിലെ തടസ്സങ്ങൾ മാറ്റി വെള്ളപ്പൊക്ക സാധ്യത കുറയ്ക്കുക.</p>
+            <h3 data-i18n="weather_advisory_heading">Agricultural Advisory</h3>
+            <p data-i18n="weather_advisory_default">Avoid applying urea as rainfall is expected within 24 hours. Clear drainage channels to prevent waterlogging.</p>
             <div class="weather-meta">
-              <span>ഉറവിടം: Open-Meteo KAU Weather Integration</span>
-              <span>അവസാനം പുതുക്കിയത്: തത്സമയം</span>
+              <span><span data-i18n="meta_source_label">Source:</span> Open-Meteo KAU Weather Integration</span>
+              <span><span data-i18n="meta_updated_label">Last Updated:</span> <span data-i18n="meta_realtime_val">Real-time</span></span>
             </div>
           </div>
         </div>
@@ -420,48 +510,48 @@
     <section id="view-schemes" class="view-panel hidden">
       <div class="section-card">
         <div class="section-header">
-          <h2>🏛️ സർക്കാർ കാർഷിക പദ്ധതികൾ (Browser Assistant)</h2>
-          <p class="section-subtitle">
-            കേരള കാർഷിക വികസന കർഷക ക്ഷേമ വകുപ്പിന്റെയും കേന്ദ്ര സർക്കാരിന്റെയും ആനുകൂല്യങ്ങൾ കണ്ടെത്താനും അപേക്ഷ തയ്യാറാക്കാനും സഹായിക്കുന്ന ഏജൻറ്.
+          <h2 data-i18n="schemes_title">🏛️ Government Agricultural Schemes (Browser Assistant)</h2>
+          <p class="section-subtitle" data-i18n="schemes_sub">
+            Assistant to discover and prepare applications for benefits from the Department of Agriculture Development and Farmers Welfare, Kerala.
           </p>
         </div>
 
         <div class="schemes-grid">
           <article class="scheme-card">
             <div class="scheme-header">
-              <h3>സുഭിക്ഷ കേരളം കാർഷിക സബ്‌സിഡി</h3>
-              <span class="badge badge-success">ലഭ്യമാണ്</span>
+              <h3 data-i18n="subhiksha_title">Subhiksha Keralam Agricultural Subsidy</h3>
+              <span class="badge badge-success" data-i18n="badge_available">Active</span>
             </div>
-            <p class="scheme-desc">നെൽക്കൃഷി ചെയ്യുന്ന ചെറുകിട കർഷകർക്ക് വിത്ത്, വളം, യന്ത്രവൽക്കരണം എന്നിവയ്ക്കുള്ള ധനസഹായം.</p>
+            <p class="scheme-desc" data-i18n="subhiksha_desc">Financial assistance for smallholder paddy farmers for certified seeds, fertilizers, and farm mechanization.</p>
             <div class="scheme-criteria">
-              <strong>യോഗ്യതാ നിബന്ധനകൾ:</strong>
+              <strong data-i18n="criteria_label">Eligibility Criteria:</strong>
               <ul>
-                <li>കേരളത്തിൽ നെൽകൃഷി ചെയ്യുന്ന കർഷകർ</li>
-                <li>കുറഞ്ഞത് 20 സെൻ്റ് സ്ഥലത്തെ കൃഷി</li>
-                <li>കൃഷിഭവനിൽ രജിസ്റ്റർ ചെയ്ത ഫാം ലോഗ്</li>
+                <li data-i18n="subhiksha_crit_1">Farmers cultivating paddy in Kerala</li>
+                <li data-i18n="subhiksha_crit_2">Minimum land holding of 20 cents</li>
+                <li data-i18n="subhiksha_crit_3">Registered farm record with local Krishi Bhavan</li>
               </ul>
             </div>
-            <button class="btn btn-secondary btn-block btn-scheme-launch" data-scheme="subhiksha">
-              🤖 ബ്രൗസർ അസിസ്റ്റന്റ് വഴി പരിശോധിക്കുക
+            <button class="btn btn-secondary btn-block btn-scheme-launch" data-scheme="subhiksha" data-i18n="btn_check_subhiksha">
+              🤖 Check Eligibility
             </button>
           </article>
 
           <article class="scheme-card">
             <div class="scheme-header">
-              <h3>AIMS പോർട്ടൽ - റോയൽറ്റി ധനസഹായം</h3>
-              <span class="badge badge-success">ലഭ്യമാണ്</span>
+              <h3 data-i18n="aims_title">AIMS Portal - Royalty Assistance</h3>
+              <span class="badge badge-success" data-i18n="badge_available">Active</span>
             </div>
-            <p class="scheme-desc">നെൽവയലുകൾ സംരക്ഷിക്കുന്ന കർഷകർക്ക് ഹെക്ടറിന് ₹5,500 നിരക്കിൽ വാർഷിക റോയൽറ്റി ആനുകൂല്യം.</p>
+            <p class="scheme-desc" data-i18n="aims_desc">Annual royalty benefit of ₹5,500 per hectare for farmers actively preserving and cultivating paddy fields.</p>
             <div class="scheme-criteria">
-              <strong>യോഗ്യതാ നിബന്ധനകൾ:</strong>
+              <strong data-i18n="criteria_label">Eligibility Criteria:</strong>
               <ul>
-                <li>നിലവിൽ കൃഷി ചെയ്യുന്ന നെൽവയൽ</li>
-                <li>ആധാർ ലിങ്ക് ചെയ്ത ബാങ്ക് അക്കൗണ്ട്</li>
-                <li>കരം തീർത്ത രസീത്</li>
+                <li data-i18n="aims_crit_1">Currently cultivated wetland/paddy field</li>
+                <li data-i18n="aims_crit_2">Aadhaar-linked bank savings account</li>
+                <li data-i18n="aims_crit_3">Latest land tax paid receipt</li>
               </ul>
             </div>
-            <button class="btn btn-secondary btn-block btn-scheme-launch" data-scheme="aims">
-              🤖 ബ്രൗസർ അസിസ്റ്റന്റ് വഴി പരിശോധിക്കുക
+            <button class="btn btn-secondary btn-block btn-scheme-launch" data-scheme="aims" data-i18n="btn_check_aims">
+              🤖 Check Eligibility
             </button>
           </article>
         </div>
@@ -470,7 +560,7 @@
         <div id="scheme-assistant-modal" class="scheme-assistant-container hidden">
           <div class="assistant-card">
             <div class="assistant-header">
-              <h3 id="assistant-scheme-title">🏛️ AIMS റോയൽറ്റി ബ്രൗസർ അസിസ്റ്റന്റ്</h3>
+              <h3 id="assistant-scheme-title" data-i18n="modal_scheme_title">🏛️ AIMS Royalty Browser Assistant</h3>
               <button type="button" id="btn-close-scheme-assistant" class="btn-close">✕</button>
             </div>
             
@@ -478,14 +568,14 @@
               <div class="status-box status-eligible">
                 <span class="status-icon">✅</span>
                 <div>
-                  <h4 id="eligibility-status-text">നിങ്ങൾ ഈ പദ്ധതിക്ക് അർഹനാണ്!</h4>
-                  <p id="eligibility-details-text">കുട്ടനാട്, ആലപ്പുഴയിലെ 50 സെൻ്റ് നെൽപ്പാടത്തിന് പ്രതിവർഷം ₹1,113 സബ്‌സിഡിക്ക് സാധ്യതയുണ്ട്.</p>
+                  <h4 id="eligibility-status-text" data-i18n="modal_elig_title">You are eligible for this scheme!</h4>
+                  <p id="eligibility-details-text" data-i18n="modal_elig_desc">Estimated royalty benefit of ₹1,113/year for 50 cents paddy land in Kuttanad, Alappuzha.</p>
                 </div>
               </div>
 
               <div class="assistant-actions">
-                <button type="button" id="btn-start-browser-prefill" class="btn btn-primary btn-block">
-                  🤖 ഓട്ടോമേറ്റഡ് പ്രീ-ഫിൽ ആരംഭിക്കുക (Launch Browser Agent)
+                <button type="button" id="btn-start-browser-prefill" class="btn btn-primary btn-block" data-i18n="btn_start_prefill">
+                  🤖 Pre-fill Form (Launch Browser Agent)
                 </button>
               </div>
             </div>
@@ -493,8 +583,8 @@
             <!-- Review Gate Step -->
             <div id="assistant-step-review" class="assistant-body hidden">
               <div class="alert alert-warning">
-                <strong>⚠️ കർഷകന്റെ അനുമതി ആവശ്യമാണ് (Human Confirmation Gate):</strong>
-                ബ്രൗസർ ഏജന്റ് തയ്യാറാക്കിയ വിവരങ്ങൾ പരിശോധിക്കുക. നിങ്ങളുടെ അനുമതിയില്ലാതെ അപേക്ഷ സമർപ്പിക്കില്ല.
+                <strong data-i18n="gate_warning_title">⚠️ Farmer Authorization Required (Human Confirmation Gate):</strong>
+                <span data-i18n="gate_warning_desc">Please review the information prepared by the Browser Agent. No application will be submitted without your explicit consent.</span>
               </div>
 
               <table class="review-table-preview">
@@ -505,15 +595,15 @@
 
               <div class="confirm-check-row">
                 <input type="checkbox" id="assistant-confirm-checkbox">
-                <label for="assistant-confirm-checkbox">
-                  ഈ വിവരങ്ങൾ പരിശോധിച്ചതായും കൃഷിഭവൻ സമർപ്പണത്തിന് അംഗീകാരം നൽകുന്നതായും സാക്ഷ്യപ്പെടുത്തുന്നു.
+                <label for="assistant-confirm-checkbox" data-i18n="confirm_chk_label">
+                  I hereby confirm that I have reviewed these details and authorize submission to Krishi Bhavan.
                 </label>
               </div>
 
               <div class="assistant-actions-split">
-                <button type="button" id="btn-cancel-scheme-prefill" class="btn btn-secondary">റദ്ദാക്കുക</button>
-                <button type="button" id="btn-confirm-final-submit" class="btn btn-primary" disabled>
-                  ✅ അന്തിമ സമർപ്പണം പൂർത്തിയാക്കുക (Submit)
+                <button type="button" id="btn-cancel-scheme-prefill" class="btn btn-secondary" data-i18n="btn_cancel">Cancel</button>
+                <button type="button" id="btn-confirm-final-submit" class="btn btn-primary" data-i18n="btn_confirm_submit" disabled>
+                  ✅ Apply Now (Submit)
                 </button>
               </div>
             </div>
@@ -522,14 +612,14 @@
             <div id="assistant-step-success" class="assistant-body hidden">
               <div class="success-banner">
                 <span class="success-icon-large">🎉</span>
-                <h3>അപേക്ഷ വിജയകരമായി സമർപ്പിച്ചു!</h3>
-                <p>അപേക്ഷാ നമ്പർ (Application Tracking ID):</p>
+                <h3 data-i18n="success_submit_title">🎉 Application Submitted Successfully!</h3>
+                <p data-i18n="tracking_id_label">Application Tracking ID:</p>
                 <div id="assistant-tracking-id" class="tracking-code">AIMS-KL-2026-000000</div>
-                <p class="success-meta">രേഖകൾ നിങ്ങളുടെ ഫാം ലോഗിൽ സ്വയം രേഖപ്പെടുത്തിയിട്ടുണ്ട്.</p>
+                <p class="success-meta" data-i18n="success_meta">Receipt details have been automatically saved to your FarmLog.</p>
               </div>
               <div class="assistant-actions">
-                <button type="button" id="btn-done-scheme-assistant" class="btn btn-secondary btn-block">
-                  പൂർത്തിയായി (Done)
+                <button type="button" id="btn-done-scheme-assistant" class="btn btn-secondary btn-block" data-i18n="btn_done">
+                  Done
                 </button>
               </div>
             </div>
@@ -538,19 +628,317 @@
       </div>
     </section>
 
-    <!-- 6. MCP TOOL TRACE VIEW -->
+    <!-- 6. DISASTER RADAR VIEW -->
+    <section id="view-disaster" class="view-panel hidden">
+      <div class="section-card disaster-radar-card">
+        <!-- Section Header -->
+        <div class="disaster-top-header">
+          <div class="disaster-header-info">
+            <div class="disaster-badge-row">
+              <span class="badge badge-emergency">🚨 <span data-i18n="disaster_radar_badge">Early Warning & Recovery</span></span>
+              <span id="disaster-feed-status" class="feed-status-pill online">● <span data-i18n="disaster_feed_live">Live Official Feed</span></span>
+            </div>
+            <h2 class="disaster-main-title" data-i18n="disaster_title">🚨 Disaster Radar (ഡിസാസ്റ്റർ റഡാർ)</h2>
+            <p class="section-subtitle" data-i18n="disaster_sub">
+              Live disaster warnings, localized safety actions, and persistent farm damage recovery for Kuttanad, Alappuzha & Kerala rice farming polders.
+            </p>
+          </div>
+
+          <!-- Location Selector & Control Panel -->
+          <div class="disaster-location-box">
+            <div class="location-control-row">
+              <label for="disaster-location-select" class="form-label" data-i18n="label_disaster_location">Selected Location:</label>
+              <select id="disaster-location-select" class="form-select disaster-select">
+                <option value="kuttanad" selected>🌾 Kuttanad (Moncompu), Alappuzha (കുട്ടനാട്, ആലപ്പുഴ)</option>
+                <option value="upper_kuttanad">🌊 Upper Kuttanad (Chengannur / Mavelikkara - അപ്പർ കുട്ടനാട്)</option>
+                <option value="palakkad">☀️ Palakkad (Chittur / Alathur - പാലക്കാട്)</option>
+                <option value="thrissur">🌾 Thrissur Kole Wetlands (തൃശ്ശൂർ കോൾനിലങ്ങൾ)</option>
+                <option value="wayanad">⛰️ Wayanad (Meppadi / Mananthavady - വയനാട്)</option>
+              </select>
+            </div>
+            <div class="location-meta-strip">
+              <span id="disaster-geo-coords" class="geo-coord-pill">📍 9.5008°N, 76.4526°E</span>
+              <span id="disaster-terrain-note" class="terrain-pill">🌾 Low-lying Polders (Below Sea Level)</span>
+            </div>
+            <div class="disaster-controls-row">
+              <button type="button" id="btn-refresh-disaster" class="btn btn-secondary btn-sm">
+                <span id="disaster-refresh-icon">🔄</span> <span data-i18n="btn_refresh_alerts">Refresh Alerts</span>
+              </button>
+              <label class="demo-toggle-label">
+                <input type="checkbox" id="toggle-disaster-demo">
+                <span class="demo-toggle-text" data-i18n="toggle_demo_alert">🧪 Drill / Demo Simulation</span>
+              </label>
+              <span id="disaster-last-checked-pill" class="last-checked-pill">Checked: Just now</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION A: CURRENT DISASTER ALERTS                             -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <div class="disaster-subcard">
+          <div class="subcard-header">
+            <div>
+              <h3 class="subcard-title" data-i18n="sec_alerts_title">📡 Current Disaster Alerts (തത്സമയ മുന്നറിയിപ്പുകൾ)</h3>
+              <p class="subcard-desc" data-i18n="sec_alerts_desc">Official emergency notifications from NDMA SACHET, KSDMA, and IMD evaluated for your selected location.</p>
+            </div>
+          </div>
+
+          <!-- Offline or Cached Warning Banner (hidden when online) -->
+          <div id="disaster-offline-banner" class="disaster-alert-banner warning hidden">
+            <span>⚠️</span>
+            <div>
+              <strong data-i18n="offline_banner_title">Offline Mode:</strong>
+              <span data-i18n="offline_banner_desc">You are currently offline. Showing cached information. Current official warnings cannot be verified without network connectivity. Tune in to official radio or local panchayat alerts.</span>
+            </div>
+          </div>
+
+          <!-- Alerts Container -->
+          <div id="disaster-alerts-list" class="disaster-alerts-grid">
+            <!-- Dynamically populated or honest empty state -->
+          </div>
+
+          <!-- Official Portals Direct Links Grid -->
+          <div class="official-portals-box">
+            <h4 class="portals-title" data-i18n="official_sources_heading">🏛️ Official Disaster Sources & Hotlines:</h4>
+            <div class="portals-grid">
+              <a href="https://sdma.kerala.gov.in/public-alert/" target="_blank" rel="noopener noreferrer" class="portal-chip">
+                <span>🔴</span>
+                <div>
+                  <strong>KSDMA Public Alerts</strong>
+                  <small>sdma.kerala.gov.in/public-alert/</small>
+                </div>
+              </a>
+              <a href="https://sachet.ndma.gov.in/" target="_blank" rel="noopener noreferrer" class="portal-chip">
+                <span>📡</span>
+                <div>
+                  <strong>NDMA SACHET CAP Portal</strong>
+                  <small>sachet.ndma.gov.in</small>
+                </div>
+              </a>
+              <a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener noreferrer" class="portal-chip">
+                <span>🌦️</span>
+                <div>
+                  <strong>IMD Mausam Warnings</strong>
+                  <small>mausam.imd.gov.in</small>
+                </div>
+              </a>
+              <div class="portal-chip helpline">
+                <span>📞</span>
+                <div>
+                  <strong>Disaster Emergency Helpline</strong>
+                  <small>Dial: 1077 (District) • 1070 (State) • 112</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION B: WHAT SHOULD I DO?                                   -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <div class="disaster-subcard">
+          <div class="subcard-header">
+            <div>
+              <h3 class="subcard-title" data-i18n="sec_actions_title">🛡️ What Should I Do? (കർഷകർ സ്വീകരിക്കേണ്ട മുൻകരുതലുകൾ)</h3>
+              <p class="subcard-desc" data-i18n="sec_actions_desc">Prioritized, life-saving practical steps tailored for Kerala farmers. Mark tasks as you complete them.</p>
+            </div>
+          </div>
+
+          <!-- Hazard Filter Tabs -->
+          <div class="hazard-filter-pills" id="hazard-filter-buttons">
+            <button type="button" class="hazard-pill-btn active" data-hazard="flood">
+              <span>🌊</span> <span data-i18n="hazard_flood">Floods & Polder Surge</span>
+            </button>
+            <button type="button" class="hazard-pill-btn" data-hazard="lightning">
+              <span>⚡</span> <span data-i18n="hazard_lightning">Thunderstorm & Lightning</span>
+            </button>
+            <button type="button" class="hazard-pill-btn" data-hazard="wind">
+              <span>🌪️</span> <span data-i18n="hazard_wind">Gale Winds & Cyclone</span>
+            </button>
+            <button type="button" class="hazard-pill-btn" data-hazard="heatwave">
+              <span>☀️</span> <span data-i18n="hazard_heatwave">Heatwave & Drought</span>
+            </button>
+          </div>
+
+          <!-- Safety First Callout Banner -->
+          <div class="safety-first-banner" id="disaster-safety-banner">
+            <div class="safety-banner-icon">⚠️</div>
+            <div class="safety-banner-content">
+              <strong id="safety-banner-title" data-i18n="safety_first_heading">SAFETY FIRST (ജീവൻ പ്രധാനം):</strong>
+              <p id="safety-banner-text">Never enter turbulent floodwater, attempt to plug outer bund breaches when water velocity is high, or delay family evacuation! Prioritize people and livestock.</p>
+            </div>
+          </div>
+
+          <!-- Action Checklist Container -->
+          <div id="disaster-actions-container" class="disaster-actions-list">
+            <!-- Dynamically populated checklist cards -->
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION C: MY FARM RECOVERY                                    -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <div class="disaster-subcard">
+          <div class="subcard-header">
+            <div>
+              <h3 class="subcard-title" data-i18n="sec_recovery_title">📋 My Farm Recovery (കൃഷിനാശ രേഖപ്പെടുത്തലും പുനരുജ്ജീവനവും)</h3>
+              <p class="subcard-desc" data-i18n="sec_recovery_desc">Record disaster damage, capture photo evidence, and maintain persistent records for Krishi Bhavan & crop insurance assistance.</p>
+            </div>
+            <button type="button" id="btn-print-recovery" class="btn btn-outline btn-sm">
+              <span>🖨️</span> <span data-i18n="btn_print_summary">Print Recovery Summary</span>
+            </button>
+          </div>
+
+          <!-- Damage Record Form -->
+          <div class="recovery-form-box">
+            <h4 class="recovery-form-heading" data-i18n="recovery_form_heading">Record Field Damage Observation</h4>
+            <form id="farm-damage-form" class="damage-form-grid">
+              <div class="form-group">
+                <label for="damage-obs-date" class="form-label" data-i18n="label_damage_date">Observation Date:</label>
+                <input type="date" id="damage-obs-date" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label for="damage-crop-stage" class="form-label" data-i18n="label_damage_crop_stage">Affected Crop & Stage:</label>
+                <select id="damage-crop-stage" class="form-select">
+                  <option value="tillering" selected>Paddy - Tillering Stage (ചിനപ്പ് ഘട്ടം)</option>
+                  <option value="seedling">Paddy - Seedling Stage (മുളപ്പൊട്ടൽ)</option>
+                  <option value="panicle">Paddy - Panicle Initiation (കതിരിടൽ)</option>
+                  <option value="flowering">Paddy - Flowering Stage (പൂവിടൽ)</option>
+                  <option value="ripening">Paddy - Maturity (വിളവെടുപ്പ് ഘട്ടം)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="damage-disaster-type" class="form-label" data-i18n="label_damage_type">Disaster Hazard Type:</label>
+                <select id="damage-disaster-type" class="form-select">
+                  <option value="flood" selected>Flooding / Polder Inundation (വെള്ളപ്പൊക്കം)</option>
+                  <option value="bund_breach">Outer Ring Bund Breach (പുറംബണ്ട് തകർച്ച)</option>
+                  <option value="wind_lodging">Gale Wind Lodging (കാറ്റിൽ നെല്ല് വീഴൽ)</option>
+                  <option value="silt_deposit">Silt & Sludge Deposition (ചെളി അടിഞ്ഞുകൂടൽ)</option>
+                  <option value="lightning_damage">Motor / Electrical Damage (പമ്പ് തകരാർ)</option>
+                  <option value="drought">Agricultural Drought (വരൾച്ച)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="damage-field-condition" class="form-label" data-i18n="label_field_condition">Field Condition & Water Depth:</label>
+                <input type="text" id="damage-field-condition" class="form-input" placeholder="e.g., Standing water 50 cm, 80% tillers submerged" data-i18n-placeholder="ph_field_condition" required>
+              </div>
+
+              <div class="form-group">
+                <label for="damage-loss-percent" class="form-label" data-i18n="label_loss_percent">Estimated Crop Loss (%):</label>
+                <div class="range-row">
+                  <input type="range" id="damage-loss-percent" min="0" max="100" value="40" class="form-range">
+                  <span id="damage-loss-val" class="range-val-badge">40%</span>
+                </div>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="damage-description" class="form-label" data-i18n="label_damage_desc">Description of Damage & Observations:</label>
+                <textarea id="damage-description" class="form-textarea" rows="2" placeholder="Describe bund condition, submerged areas, silt accumulation, and crop state..." data-i18n-placeholder="ph_damage_desc" required></textarea>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="damage-recovery-action" class="form-label" data-i18n="label_recovery_action">Recovery Actions Taken / Planned:</label>
+                <input type="text" id="damage-recovery-action" class="form-input" placeholder="e.g., De-watering with 25HP motor initiated, lime applied to counter acidity, alerted Krishi Bhavan" data-i18n-placeholder="ph_recovery_action">
+              </div>
+
+              <!-- Photo Upload Section -->
+              <div class="form-group photo-upload-box">
+                <label class="form-label" data-i18n="label_damage_photo">Damage Photograph (Current Field Condition):</label>
+                <div class="photo-picker">
+                  <input type="file" id="damage-photo-input" accept="image/*" class="photo-file-input">
+                  <div id="damage-photo-preview-wrap" class="photo-preview-box hidden">
+                    <img id="damage-photo-preview" src="" alt="Damage Preview">
+                    <button type="button" id="btn-remove-damage-photo" class="btn-remove-photo">✕</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group photo-upload-box">
+                <label class="form-label" data-i18n="label_before_photo">Before Photograph (Healthy Field, Optional):</label>
+                <div class="photo-picker">
+                  <input type="file" id="before-photo-input" accept="image/*" class="photo-file-input">
+                  <div id="before-photo-preview-wrap" class="photo-preview-box hidden">
+                    <img id="before-photo-preview" src="" alt="Before Preview">
+                    <button type="button" id="btn-remove-before-photo" class="btn-remove-photo">✕</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions full-width">
+                <button type="submit" id="btn-save-damage-record" class="btn btn-primary" data-i18n="btn_save_damage">
+                  💾 Save Farm Damage Record
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Official Assistance Portals Box -->
+          <div class="assistance-portals-card">
+            <h4 data-i18n="assistance_heading">🏛️ Official Relief & Compensation Channels:</h4>
+            <div class="assistance-links-grid">
+              <a href="https://aims.kerala.gov.in/" target="_blank" rel="noopener noreferrer" class="assist-chip">
+                <span>🌾</span>
+                <div>
+                  <strong>Kerala AIMS Crop Loss Relief</strong>
+                  <small>Apply for State disaster crop loss assistance</small>
+                </div>
+              </a>
+              <a href="https://pmfby.gov.in/" target="_blank" rel="noopener noreferrer" class="assist-chip">
+                <span>🛡️</span>
+                <div>
+                  <strong>PMFBY Crop Insurance</strong>
+                  <small>Pradhan Mantri Fasal Bima Yojana claims</small>
+                </div>
+              </a>
+              <div class="assist-chip">
+                <span>🏢</span>
+                <div>
+                  <strong>Local Krishi Bhavan</strong>
+                  <small>Submit damage report within 72 hours of flood</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Legal Disclaimer -->
+          <div class="disclaimer-callout">
+            <span>ℹ️</span>
+            <div>
+              <strong data-i18n="disclaimer_heading">Important Notice / നിരാകരണം:</strong>
+              <p data-i18n="disclaimer_text">
+                Recorded observations are farmer-provided evidence for self-documentation and insurance preparation, not an official damage assessment, and do not guarantee insurance approval or government compensation.
+              </p>
+            </div>
+          </div>
+
+          <!-- Chronological List of Previous Damage Records -->
+          <div class="damage-history-section">
+            <h4 class="history-section-title" data-i18n="history_heading">Previous Farm Damage Observations</h4>
+            <div id="damage-records-container" class="damage-records-list">
+              <!-- Dynamically populated records -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. MCP TOOL TRACE VIEW -->
     <section id="view-traces" class="view-panel hidden">
       <div class="section-card">
         <div class="section-header">
-          <h2>⚙️ പ്രവർത്തന രേഖ (MCP Protocol & Execution Trace)</h2>
-          <p class="section-subtitle">
-            ഹാക്കത്തോൺ ഡെമോൺസ്ട്രേഷൻ പാനൽ: മോഡൽ കോൺടെക്സ്റ്റ് പ്രോട്ടോക്കോൾ (MCP) ടൂൾ കോളുകളും റൂട്ടർ തീരുമാനങ്ങളും.
+          <h2 data-i18n="traces_title">⚙️ Activity Log (MCP Protocol & Execution Trace)</h2>
+          <p class="section-subtitle" data-i18n="traces_sub">
+            Demonstration Panel: Model Context Protocol (MCP) tool executions and router decisions.
           </p>
         </div>
 
         <div class="trace-toolbar">
-          <button id="btn-clear-trace" class="btn btn-secondary btn-sm">രേഖ മായ്ക്കുക (Clear)</button>
-          <span class="trace-count" id="trace-event-count">0 സംഭവങ്ങൾ രേഖപ്പെടുത്തി</span>
+          <button id="btn-clear-trace" class="btn btn-secondary btn-sm" data-i18n="btn_clear_trace">Clear Log</button>
+          <span class="trace-count" id="trace-event-count">0 events logged</span>
         </div>
 
         <div id="trace-container" class="trace-box">
@@ -566,11 +954,13 @@
   <!-- Footer -->
   <footer class="app-footer">
     <div class="footer-container">
-      <p>© 2026 കർഷക കെയർ (Karshaka Care) • കേരള കാർഷിക സർവ്വകലാശാല പാക്കേജ് ഓഫ് പ്രാക്ടീസസ് അടിസ്ഥാനമാക്കി വികസിപ്പിച്ചത്.</p>
-      <p class="footer-subtext">Designed for Kerala Farmers • Malayalam-First • Offline-Capable & Deterministic</p>
+      <p data-i18n="footer_text">© 2026 Karshaka Care • Developed based on Kerala Agricultural University Package of Practices.</p>
+      <p class="footer-subtext" data-i18n="footer_subtext">Designed for Kerala Farmers • Malayalam & English • Offline-Capable & Deterministic</p>
     </div>
   </footer>
 
-  <script type="module" src="/js/app.js"></script>
+  <!-- Offline KAU Decision Engine (runs in browser, no server needed) -->
+  <script src="/js/offline-advisor.js?v=20261011_v11"></script>
+  <script type="module" src="/js/app.js?v=20261011_v11"></script>
 </body>
 </html>

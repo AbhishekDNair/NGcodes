@@ -40,8 +40,11 @@ test('Voice & Latency: End-to-end query endpoint profiles and responds within vo
   const port = server.address().port;
 
   try {
+    // Warm up the ephemeral server socket to eliminate Windows localhost DNS lookup jitter
+    await fetch(`http://127.0.0.1:${port}/api/health`);
+
     const t0 = performance.now();
-    const res = await fetch(`http://localhost:${port}/api/query`, {
+    const res = await fetch(`http://127.0.0.1:${port}/api/query`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -55,7 +58,7 @@ test('Voice & Latency: End-to-end query endpoint profiles and responds within vo
     const data = await res.json();
     assert.equal(data.success, true);
     assert.ok(data.data.summary);
-    // Over local HTTP stack, total latency should be well under 250ms for seamless conversational experience
+    // Over local HTTP stack, total latency should be well under 500ms for seamless conversational experience
     assert.ok(roundtripMs < 500, `Roundtrip latency should be conversational (< 500ms), was ${roundtripMs.toFixed(1)}ms`);
   } finally {
     server.close();

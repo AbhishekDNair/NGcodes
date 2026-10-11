@@ -17,7 +17,7 @@ let labelsData = null;
 function getLabels() {
   if (!labelsData) {
     const raw = fs.readFileSync(LABELS_PATH, 'utf-8');
-    labelsData = JSON.parse(raw);
+    labelsData = JSON.parse(raw.replace(/^\uFEFF/, ''));
   }
   return labelsData;
 }

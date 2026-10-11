@@ -1,6 +1,6 @@
-﻿{
+{
   "model": {
-    "id": "Karshaka Care-rice-mobilenet-onnx",
+    "id": "krishivaani-rice-mobilenet-onnx",
     "version": "1.0.0",
     "format": "ONNX",
     "architecture": "MobileNetV2 / EfficientNet Rice Leaf Classifier",

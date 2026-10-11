@@ -110,3 +110,41 @@ test('Workflow: HTML Interface contains all mandatory semantic IDs', () => {
     assert.ok(html.includes(`id="${id}"`), `Mandatory DOM ID missing: #${id}`);
   }
 });
+
+test('Workflow: Full-page internationalization covers all sections and views', () => {
+  const html = fs.readFileSync(path.join(CONFIG.PUBLIC_DIR, 'index.html'), 'utf-8');
+
+  // Verify data-i18n attributes exist in every major view and section
+  const expectedSections = [
+    'nav_home', 'nav_crop', 'nav_farmlog', 'nav_weather', 'nav_schemes', 'nav_traces',
+    'hero_tag', 'home_greeting', 'home_instructions', 'ask_btn',
+    'crop_section_title', 'dropzone_title', 'btn_run_inference', 'idle_title',
+    'farmlog_title', 'farmlog_add_heading', 'btn_add_farmlog',
+    'weather_section_title', 'weather_refresh_btn', 'weather_advisory_heading',
+    'schemes_title', 'subhiksha_title', 'aims_title', 'modal_scheme_title',
+    'traces_title', 'btn_clear_trace', 'footer_text'
+  ];
+
+  for (const key of expectedSections) {
+    assert.ok(html.includes(`data-i18n="${key}"`), `Missing data-i18n="${key}" in index.html`);
+  }
+});
+
+test('Workflow: I18N dictionary in app.js covers all data-i18n keys for both ML and EN', () => {
+  const html = fs.readFileSync(path.join(CONFIG.PUBLIC_DIR, 'index.html'), 'utf-8');
+  const appJs = fs.readFileSync(path.join(CONFIG.PUBLIC_DIR, 'js', 'app.js'), 'utf-8');
+
+  // Extract all data-i18n keys from index.html
+  const i18nMatches = Array.from(html.matchAll(/data-i18n="([^"]+)"/g)).map(m => m[1]);
+  assert.ok(i18nMatches.length > 50, `Expected at least 50 localized elements, found ${i18nMatches.length}`);
+
+  // Extract all data-i18n-placeholder keys from index.html
+  const placeholderMatches = Array.from(html.matchAll(/data-i18n-placeholder="([^"]+)"/g)).map(m => m[1]);
+  assert.ok(placeholderMatches.length >= 2, `Expected at least 2 localized placeholders, found ${placeholderMatches.length}`);
+
+  // Verify that app.js contains translations in I18N_DICTIONARY for all keys
+  for (const key of [...i18nMatches, ...placeholderMatches]) {
+    assert.ok(appJs.includes(`${key}:`), `Missing dictionary entry for ${key} in app.js`);
+  }
+});
+

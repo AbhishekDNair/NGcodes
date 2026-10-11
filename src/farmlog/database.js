@@ -219,3 +219,128 @@ export function getFarmLogSummary(customDb = null) {
     persistenceEngine: 'node:sqlite (ACID WAL Mode)'
   };
 }
+
+/**
+ * Records a persistent farm disaster damage observation
+ * @param {Object} data
+ * @param {DatabaseSync} [customDb]
+ * @returns {Object}
+ */
+export function addDisasterDamageRecord(data = {}, customDb = null) {
+  const db = customDb || getFarmLogDB();
+
+  if (!data.damage_description || typeof data.damage_description !== 'string' || data.damage_description.trim().length === 0) {
+    throw new Error('Disaster damage record requires a description');
+  }
+
+  const locationId = data.locationId || data.location_id || 'kuttanad';
+  const locationName = data.locationName || data.location_name || 'കുട്ടനാട്, ആലപ്പുഴ (Kuttanad, Alappuzha)';
+  const cropType = data.cropType || data.crop_type || 'rice_paddy';
+  const cropStage = data.cropStage || data.crop_stage || 'tillering';
+  const disasterType = data.disasterType || data.disaster_type || 'flood';
+  const damageDescription = data.damage_description.trim();
+  const fieldCondition = data.fieldCondition || data.field_condition || '';
+  const estimatedLossPercent = Math.min(100, Math.max(0, parseInt(data.estimatedLossPercent || data.estimated_loss_percent || 0, 10)));
+  const recoveryActionTaken = data.recoveryActionTaken || data.recovery_action_taken || '';
+  const photoAfter = data.photoAfter || data.photo_after || null;
+  const photoBefore = data.photoBefore || data.photo_before || null;
+  const observationDate = data.observationDate || data.observation_date || new Date().toISOString().split('T')[0];
+  const checklistState = data.checklistState ? JSON.stringify(data.checklistState) : null;
+  const createdAt = new Date().toISOString();
+
+  const stmt = db.prepare(`
+    INSERT INTO disaster_damage_records (
+      location_id, location_name, crop_type, crop_stage, disaster_type,
+      damage_description, field_condition, estimated_loss_percent,
+      recovery_action_taken, photo_after, photo_before,
+      observation_date, checklist_state, status, created_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'local_persisted', ?)
+  `);
+
+  const info = stmt.run(
+    locationId, locationName, cropType, cropStage, disasterType,
+    damageDescription, fieldCondition, estimatedLossPercent,
+    recoveryActionTaken, photoAfter, photoBefore,
+    observationDate, checklistState, createdAt
+  );
+
+  const recordId = Number(info.lastInsertRowid);
+
+  // Synchronize observation into primary FarmLog
+  try {
+    addFarmLogEntry({
+      cropType,
+      cropStage,
+      entryType: 'observation',
+      title: `ഡിസാസ്റ്റർ നാശനഷ്ട നിരീക്ഷണം: ${disasterType.toUpperCase()}`,
+      content: `[${locationName}] നാശനഷ്ടം: ${damageDescription}. പാടത്തെ അവസ്ഥ: ${fieldCondition || 'N/A'}. നഷ്ട അനുമാനം: ${estimatedLossPercent}%. പുനരുജ്ജീവന നടപടി: ${recoveryActionTaken || 'None'}.`,
+      source: 'disaster_radar_farmer',
+      imageRef: photoAfter ? 'disaster_photo_attached' : null
+    }, db);
+  } catch (syncErr) {
+    console.warn('[Disaster Radar] FarmLog sync note:', syncErr.message);
+  }
+
+  return {
+    id: recordId,
+    location_id: locationId,
+    location_name: locationName,
+    crop_type: cropType,
+    crop_stage: cropStage,
+    disaster_type: disasterType,
+    damage_description: damageDescription,
+    field_condition: fieldCondition,
+    estimated_loss_percent: estimatedLossPercent,
+    recovery_action_taken: recoveryActionTaken,
+    photo_after: photoAfter,
+    photo_before: photoBefore,
+    observation_date: observationDate,
+    checklist_state: data.checklistState || null,
+    status: 'local_persisted',
+    created_at: createdAt
+  };
+}
+
+/**
+ * Retrieves damage records from SQLite
+ * @param {Object} [filter]
+ * @param {DatabaseSync} [customDb]
+ * @returns {Object[]}
+ */
+export function getDisasterDamageRecords(filter = {}, customDb = null) {
+  const db = customDb || getFarmLogDB();
+  const limit = Math.max(1, Math.min(filter.limit || 50, 100));
+
+  let sql = 'SELECT * FROM disaster_damage_records';
+  const params = [];
+
+  if (filter.locationId) {
+    sql += ' WHERE location_id = ?';
+    params.push(filter.locationId);
+  }
+
+  sql += ' ORDER BY id DESC LIMIT ?';
+  params.push(limit);
+
+  const stmt = db.prepare(sql);
+  const rows = stmt.all(...params);
+
+  return rows.map(r => ({
+    ...r,
+    checklist_state: r.checklist_state ? JSON.parse(r.checklist_state) : null
+  }));
+}
+
+/**
+ * Deletes a damage record by ID
+ * @param {number} id
+ * @param {DatabaseSync} [customDb]
+ * @returns {boolean}
+ */
+export function deleteDisasterDamageRecord(id, customDb = null) {
+  const db = customDb || getFarmLogDB();
+  const stmt = db.prepare('DELETE FROM disaster_damage_records WHERE id = ?');
+  const res = stmt.run(id);
+  return res.changes > 0;
+}
+

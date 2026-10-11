@@ -45,6 +45,9 @@ test('Offline Resilience: Edge AI model runs 100% locally with zero internet', a
 });
 
 test('Offline Resilience: Deterministic KAU rule engine runs 100% locally without network', () => {
+  // Warmup JIT
+  evaluateAgriculturalDecision({ cropStage: CROP_STAGES.TILLERING, farmerSymptoms: [] });
+
   const t0 = performance.now();
   const decision = evaluateAgriculturalDecision({
     cropStage: CROP_STAGES.TILLERING,

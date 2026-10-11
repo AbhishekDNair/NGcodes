@@ -5,7 +5,7 @@
 
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
-import { createKarshaka CareMCPServer } from './server.js';
+import { createKarshakaCareServer } from './server.js';
 
 let clientInstance = null;
 let serverInstance = null;
@@ -15,13 +15,13 @@ const mcpTraceHistory = [];
  * Initializes and connects the official MCP Client to the Server
  * @returns {Promise<Client>}
  */
-export async function getKarshaka CareMCPClient() {
+export async function getKarshakaCareClient() {
   if (!clientInstance) {
-    serverInstance = createKarshaka CareMCPServer();
+    serverInstance = createKarshakaCareServer();
 
     clientInstance = new Client(
       {
-        name: 'Karshaka Care-orchestrator-client',
+        name: 'karshaka-care-orchestrator-client',
         version: '1.0.0'
       },
       {
@@ -47,7 +47,7 @@ export async function getKarshaka CareMCPClient() {
  * @returns {Promise<Object[]>} List of tool schemas
  */
 export async function discoverMCPTools() {
-  const client = await getKarshaka CareMCPClient();
+  const client = await getKarshakaCareClient();
   const startTime = performance.now();
 
   const response = await client.listTools();
@@ -67,7 +67,7 @@ export async function discoverMCPTools() {
  * @returns {Promise<Object>} Structured return value
  */
 export async function invokeMCPTool(toolName, args = {}) {
-  const client = await getKarshaka CareMCPClient();
+  const client = await getKarshakaCareClient();
   const startTime = performance.now();
 
   logMcpTrace('INVOKE_START', `Calling MCP tool: "${toolName}"`, 'call', { tool: toolName, arguments: args });

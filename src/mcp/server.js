@@ -17,10 +17,10 @@ export const ALL_TOOLS = [
  * Creates and configures an official MCP Server instance
  * @returns {Server}
  */
-export function createKarshaka CareMCPServer() {
+export function createKarshakaCareServer() {
   const server = new Server(
     {
-      name: 'Karshaka Care-mcp-server',
+      name: 'karshaka-care-mcp-server',
       version: '1.0.0'
     },
     {
@@ -81,7 +81,7 @@ export function createKarshaka CareMCPServer() {
 // Stdio standalone runner (for CLI or external orchestrators)
 if (process.argv.includes('--stdio')) {
   import('@modelcontextprotocol/sdk/server/stdio.js').then(async ({ StdioServerTransport }) => {
-    const server = createKarshaka CareMCPServer();
+    const server = createKarshakaCareServer();
     const transport = new StdioServerTransport();
     await server.connect(transport);
     console.error('[Karshaka Care MCP Server] Running via stdio transport.');

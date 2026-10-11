@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Karshaka Care Controlled Browser Assistant: Kerala Agricultural Scheme Navigator
  * Automates eligibility checks, guided navigation, and pre-filling on AIMS / Subhiksha Keralam portals.
  * Strictly enforces an explicit Human-in-the-Loop Confirmation Gate before any government submission.
@@ -139,7 +139,7 @@ export async function runSchemeNavigator({
     const logEntry = addFarmLogEntry({
       entry_type: 'action_confirmed',
       crop_stage: 'tillering',
-      content: `AIMS കാർഷിക റോയൽറ്റി ധനസഹായ അപേക്ഷ സമർപ്പിച്ചു. അപേക്ഷാ നമ്പർ: ${applicationId}. സ്ഥലം: ${reviewData.district}, വിസ്തീർണ്ണം: ${reviewData.landArea}.`,
+      content: `Submitted AIMS Agricultural Royalty subsidy application. Application Ref: ${applicationId}. Location: ${reviewData.district}, Area: ${reviewData.landArea}.`,
       source: 'aims_browser_agent',
       metadata: {
         applicationId,

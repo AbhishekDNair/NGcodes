@@ -7,9 +7,19 @@ import { adviseQuestion } from './decision-engine/text-advisor.js';
 import { analyzeRiceLeaf } from './ml/edge-classifier.js';
 import { evaluateAgriculturalDecision } from './decision-engine/rules.js';
 import { addFarmLogEntry, getFarmLogEntries, getFarmLogSummary, confirmFarmActivity } from './farmlog/database.js';
+import { generateFarmPlan } from './farm-planner/planner.js';
 import { discoverMCPTools, invokeMCPTool, getMCPTraceLog } from './mcp/client.js';
 import { coordinateRequest } from './orchestrator/coordinator.js';
 import { checkEligibility, runSchemeNavigator } from './browser-agent/scheme-navigator.js';
+import { 
+  getDisasterAlerts, 
+  getDisasterActionPlan, 
+  recordFarmDamage, 
+  getSavedDamageRecords, 
+  removeDamageRecord,
+  DISASTER_LOCATIONS,
+  OFFICIAL_DISASTER_PORTALS
+} from './disaster-radar/radar.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,8 +32,8 @@ if (!fs.existsSync(CONFIG.DATA_DIR)) {
 }
 
 // Middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Static Assets
 app.use(express.static(CONFIG.PUBLIC_DIR));
@@ -63,7 +73,7 @@ app.post('/api/query', (req, res) => {
 // Edge Crop Analysis Endpoint (Local ONNX Model Inference)
 app.post('/api/analyze-crop', async (req, res) => {
   try {
-    const { image, imageBase64 } = req.body;
+    const { image, imageBase64, cropStage, symptoms } = req.body;
     const rawData = image || imageBase64;
     if (!rawData) {
       return res.status(400).json({
@@ -72,11 +82,26 @@ app.post('/api/analyze-crop', async (req, res) => {
       });
     }
 
-    // Strip data URL prefix if present (e.g. data:image/jpeg;base64,...)
-    const cleanBase64 = rawData.replace(/^data:image\/\w+;base64,/, '');
+    // Strip any data URL prefix safely (e.g. data:image/jpeg;base64, or any mime)
+    const cleanBase64 = rawData.replace(/^data:.*?;base64,/, '');
     const buffer = Buffer.from(cleanBase64, 'base64');
 
     const result = await analyzeRiceLeaf(buffer);
+
+    // If farmer provided observed symptoms or growth stage, incorporate deterministic KAU decision
+    if (cropStage || (symptoms && symptoms.length > 0)) {
+      try {
+        const decision = evaluateAgriculturalDecision({
+          cropStage: cropStage || 'tillering',
+          farmerSymptoms: Array.isArray(symptoms) ? symptoms : [symptoms],
+          imagePrediction: result
+        });
+        result.decision = decision;
+      } catch (decErr) {
+        console.warn('[Karshaka Care] Decision evaluation note:', decErr.message);
+      }
+    }
+
     res.json(result);
   } catch (err) {
     res.status(400).json({
@@ -171,6 +196,105 @@ app.post('/api/farmlog/confirm', (req, res) => {
     });
   }
 });
+
+// Adaptive Farm Planner Endpoint
+app.post('/api/farmlog/plan', (req, res) => {
+  try {
+    const { cropStage, weatherData, language } = req.body || {};
+    const farmHistory = getFarmLogEntries({ limit: 20 });
+    const plan = generateFarmPlan({
+      farmHistory,
+      cropStage: cropStage || 'tillering',
+      weatherData: weatherData || null,
+      language: language || 'en'
+    });
+    res.json(plan);
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Farm plan generation failed', message: err.message });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// DISASTER RADAR ENDPOINTS
+// ═══════════════════════════════════════════════════════════════
+
+// Get Disaster Alerts for a location (NDMA SACHET live feed / KSDMA / Simulation)
+app.get('/api/disaster/alerts', async (req, res) => {
+  try {
+    const { location, demo } = req.query;
+    const result = await getDisasterAlerts({
+      locationId: location || 'kuttanad',
+      isDemo: demo === 'true'
+    });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Failed to retrieve disaster alerts', message: err.message });
+  }
+});
+
+// Get Action Steps & Safety Checklist for a hazard
+app.get('/api/disaster/actions', (req, res) => {
+  try {
+    const { hazard, location } = req.query;
+    const plan = getDisasterActionPlan({
+      hazard: hazard || 'flood',
+      locationId: location || 'kuttanad'
+    });
+    res.json(plan);
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Failed to retrieve action plan', message: err.message });
+  }
+});
+
+// Get Persistent Farm Damage Records from SQLite
+app.get('/api/disaster/recovery', (req, res) => {
+  try {
+    const { location } = req.query;
+    const records = getSavedDamageRecords({ locationId: location });
+    res.json({
+      success: true,
+      recordsCount: records.length,
+      records,
+      officialPortals: OFFICIAL_DISASTER_PORTALS
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Failed to fetch damage records', message: err.message });
+  }
+});
+
+// Record a new Farm Damage Observation
+app.post('/api/disaster/recovery', (req, res) => {
+  try {
+    const created = recordFarmDamage(req.body);
+    res.status(201).json({
+      success: true,
+      message: 'Damage observation recorded persistently in SQLite & FarmLog',
+      record: created
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, error: 'Failed to save damage record', message: err.message });
+  }
+});
+
+// Delete a Damage Record by ID
+app.delete('/api/disaster/recovery/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const deleted = removeDamageRecord(id);
+    res.json({ success: true, deleted });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Failed to delete record', message: err.message });
+  }
+});
+
+// Get Available Disaster Locations
+app.get('/api/disaster/locations', (req, res) => {
+  res.json({
+    success: true,
+    locations: Object.values(DISASTER_LOCATIONS)
+  });
+});
+
 
 // MCP Tool Discovery Endpoint
 app.get('/api/mcp/tools', async (req, res) => {

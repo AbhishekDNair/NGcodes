@@ -1,18 +1,19 @@
-﻿// Karshaka Care Service Worker - Offline Caching & Resilience
-// Version: Karshaka Care-sw-v1
+// Karshaka Care Service Worker - Offline Caching & Resilience
+// Version: karshaka-care-sw-v11 (migrated from krishivaani-v1)
 
-const CACHE_NAME = 'Karshaka Care-v1';
+const CACHE_NAME = 'karshaka-care-v11';
 
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/css/styles.css',
   '/js/app.js',
+  '/js/offline-advisor.js',
   '/manifest.json',
   '/assets/rice_leaf_sample.jpg'
 ];
 
-// Install: Pre-cache core application shell
+// Install: Pre-cache core application shell and activate immediately
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -22,7 +23,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate: Purge obsolete caches
+// Activate: Purge all obsolete caches immediately
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -54,6 +55,7 @@ self.addEventListener('fetch', (event) => {
             JSON.stringify({
               offline: true,
               success: false,
+              message: 'No internet connection. System running in offline local mode.',
               messageMl: 'ഇന്റർനെറ്റ് കണക്ഷൻ ലഭ്യമല്ല. സിസ്റ്റം ഓഫ്‌ലൈൻ മോഡിൽ പ്രവർത്തിക്കുന്നു.',
               messageEn: 'No internet connection. System running in offline local mode.',
               timestamp: new Date().toISOString()
@@ -68,14 +70,10 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 2. Static Assets & Pages (Cache-First with Network Fallback)
+  // 2. Static Assets & Pages (Network-First with Cache Fallback for instant updates)
   event.respondWith(
-    caches.match(request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(request).then((networkResponse) => {
-        // Cache successful GET requests for future offline use
+    fetch(request)
+      .then((networkResponse) => {
         if (request.method === 'GET' && networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -83,12 +81,16 @@ self.addEventListener('fetch', (event) => {
           });
         }
         return networkResponse;
-      }).catch(() => {
-        // Fallback to cached index.html for navigation requests
-        if (request.mode === 'navigate') {
-          return caches.match('/index.html');
-        }
-      });
-    })
+      })
+      .catch(() => {
+        return caches.match(request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          if (request.mode === 'navigate') {
+            return caches.match('/index.html');
+          }
+        });
+      })
   );
 });

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Karshaka Care Agricultural Text Advisor
  * Deterministic consultation module based on Kerala Agricultural University (KAU)
  * Package of Practices - Rice (Paddy) cultivation (16th Edition & Ad-hoc Kuttanad Package).
@@ -9,8 +9,8 @@ export const ADVISOR_RULES = [
   // 1. Brown Spot (ഇലപ്പുള്ളി രോഗം)
   {
     id: 'RULE_BROWN_SPOT',
-    keywordsMl: ['തവിട്ടു', 'പുള്ളി', 'ഇലപ്പുള്ളി', 'കുത്തുകൾ', 'പാടുകൾ', 'പുള്ളികൾ', 'തവിട്ടുനിറം'],
-    keywordsEn: ['brown spot', 'spots', 'leaf spot', 'bipolaris', 'brown spots', 'circular spots', 'pulli', 'thavittu', 'ilappulli', 'ila pulli'],
+    keywordsMl: ['തവിട്ടു', 'പുള്ളി', 'ഇലപ്പുള്ളി', 'കുത്തുകൾ', 'പാടുകൾ', 'പുള്ളികൾ', 'തവിട്ടുനിറം', 'തവിട്ടു പുള്ളി', 'തവിട്ടുപുള്ളി', 'ബ്രൗൺ സ്പോട്ട്', 'ഇലയിൽ പുള്ളി', 'പുള്ളി രോഗം', 'ബ്രൗൺസ്പോട്ട്', 'കറുത്ത പുള്ളി'],
+    keywordsEn: ['brown spot', 'spots', 'leaf spot', 'bipolaris', 'brown spots', 'circular spots', 'pulli', 'thavittu', 'ilappulli', 'ila pulli', 'thavittu pulli', 'brown', 'ila pullikal'],
     category: 'disease_brown_spot',
     outcome: 'FOLLOW_VERIFIED_GUIDANCE',
     reference: 'KAU Package of Practices - Rice (Paddy), Section 3.2.1: Brown Spot Management',
@@ -35,8 +35,8 @@ export const ADVISOR_RULES = [
   // 2. Leaf Blast (ഇലക്കരിച്ചിൽ)
   {
     id: 'RULE_BLAST',
-    keywordsMl: ['ഇലക്കരിച്ചിൽ', 'കരിച്ചിൽ', 'കരിഞ്ഞു', 'കരിയുന്നു', 'കരിയൽ', 'സ്പിൻഡിൽ', 'തുമ്പു കരിയൽ', 'തുമ്പ് കരിയൽ', 'കരിഞ്ഞ', 'ഉണങ്ങുന്നു'],
-    keywordsEn: ['blast', 'leaf blast', 'drying', 'spindle', 'magnaporthe', 'pyricularia', 'karichil', 'ila karichil', 'kariyunnu', 'unangunnu', 'kariyil'],
+    keywordsMl: ['ഇലക്കരിച്ചിൽ', 'കരിച്ചിൽ', 'കരിഞ്ഞു', 'കരിയുന്നു', 'കരിയൽ', 'സ്പിൻഡിൽ', 'തുമ്പു കരിയൽ', 'തുമ്പ് കരിയൽ', 'കരിഞ്ഞ', 'ഉണങ്ങുന്നു', 'ഇല കരിച്ചിൽ', 'കരിഞ്ഞുണങ്ങുന്നു', 'ബ്ലാസ്റ്റ്', 'ബ്ളാസ്റ്റ്', 'ഇല കരിയൽ', 'കരിഞ്ഞുപോയി'],
+    keywordsEn: ['blast', 'leaf blast', 'drying', 'spindle', 'magnaporthe', 'pyricularia', 'karichil', 'ila karichil', 'kariyunnu', 'unangunnu', 'kariyil', 'ila kariyil', 'kariññu'],
     category: 'disease_blast',
     outcome: 'FOLLOW_VERIFIED_GUIDANCE',
     reference: 'KAU Package of Practices - Rice, Section 3.2.2: Blast Management',
@@ -113,8 +113,8 @@ export const ADVISOR_RULES = [
   // 5. Stem Borer (തണ്ടുതുരപ്പൻ പുഴു)
   {
     id: 'RULE_STEM_BORER',
-    keywordsMl: ['തണ്ടുതുരപ്പൻ', 'തുരപ്പൻ', 'വെൺകതിർ', 'തണ്ട് ഉണങ്ങൽ', 'തണ്ടു തുരപ്പൻ'],
-    keywordsEn: ['stem borer', 'dead heart', 'white earhead', 'scirpophaga', 'thandu thurappan', 'thurappan', 'venkathir'],
+    keywordsMl: ['തണ്ടുതുരപ്പൻ', 'തുരപ്പൻ', 'വെൺകതിർ', 'തണ്ട് ഉണങ്ങൽ', 'തണ്ടു തുരപ്പൻ', 'കതിർ തുരപ്പൻ', 'കതിർതുരപ്പൻ', 'നടുനാമ്പ്', 'വെളുത്ത കതിർ', 'തുരപ്പൻ പുഴു'],
+    keywordsEn: ['stem borer', 'dead heart', 'white earhead', 'scirpophaga', 'thandu thurappan', 'thurappan', 'venkathir', 'kathir thurappan', 'thurappan puzhu'],
     category: 'pest_stem_borer',
     outcome: 'FOLLOW_VERIFIED_GUIDANCE',
     reference: 'KAU Package of Practices - Rice, Section 3.1.1: Stem Borer Management',
@@ -139,8 +139,8 @@ export const ADVISOR_RULES = [
   // 6. Leaf Folder (ഇലച്ചുരുട്ടി പുഴു)
   {
     id: 'RULE_LEAF_FOLDER',
-    keywordsMl: ['ഇലച്ചുരുട്ടി', 'ചുരുട്ടി', 'ഇല മടക്കൽ', 'ഇല ചുരുളൽ', 'ഇലച്ചുരുട്ടൻ'],
-    keywordsEn: ['leaf folder', 'cnaphalocrocis', 'folded leaves', 'ila churutti', 'ilachurutti', 'churutti'],
+    keywordsMl: ['ഇലച്ചുരുട്ടി', 'ചുരുട്ടി', 'ഇല മടക്കൽ', 'ഇല ചുരുളൽ', 'ഇലച്ചുരുട്ടൻ', 'ഓലചുരുട്ടി', 'ഓലച്ചുരുട്ടി', 'ഓല ചുരുട്ടി', 'ഓലചുരുട്ടൻ', 'ഇല ചുരുട്ടി', 'ചുരുട്ടി പുഴു', 'ഓലചുരുട്ടി പുഴു', 'ഓലച്ചുരുട്ടൻ പുഴു'],
+    keywordsEn: ['leaf folder', 'cnaphalocrocis', 'folded leaves', 'ila churutti', 'ilachurutti', 'churutti', 'ola churutti', 'olachurutti', 'ola churutti puzhu'],
     category: 'pest_leaf_folder',
     outcome: 'FOLLOW_VERIFIED_GUIDANCE',
     reference: 'KAU Package of Practices - Rice, Section 3.1.2: Leaf Folder Management',
